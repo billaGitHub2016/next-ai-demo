@@ -8,11 +8,18 @@ import LeftpanelDashboard from "@/components/Common/LeftpanelDashboard";
 import Modal from "@/components/Common/Modal";
 import TextGenerator from "@/components/TextGenerator/TextGenerator";
 import StaticbarDashboard from "@/components/Common/StaticbarDashboard";
-import { useCallback, useState, useRef } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 
 const TextGeneratorPage = () => {
   const newChatsRef = useRef([]);
   const [newChats, setNewchats] = useState([]);
+
+  useEffect(() => {
+    const html = document.getElementsByTagName('html')[0]
+    if (html) {
+      html.scrollIntoView({block: 'end', behavior:"smooth"})
+    }
+  }, [newChats])
 
   // 开始一个对话
   const onStartChat = (params) => {
@@ -21,6 +28,7 @@ const TextGeneratorPage = () => {
       author: "/images/team/team-01.jpg",
       title: "You",
       desc: params.topic,
+      status: 'start',
       content: [
         {
           "img": "/images/icons/loader-one.gif",
@@ -41,7 +49,10 @@ const TextGeneratorPage = () => {
   const onResponse = (params) => {
     const match = newChatsRef.current.find(item => item.id === params.id)
     if (match) {
+      match.status = 'typing'
       match.content[0].desc += params.text
+      match.content[0].lastDesc = params.text.length > 0 ? match.content[0].desc.slice(0, -(params.text.length)) : match.content[0].lastDesc
+      match.content[0].typingText = params.text
       setNewchats([...newChatsRef.current])
     }
   }
@@ -50,9 +61,12 @@ const TextGeneratorPage = () => {
   const onFinishChat = (params) => {
     const match = newChatsRef.current.find(item => item.id === params.id)
     if (match) {
-      match.content[0].img = ''
-      match.content[0].text = ''
-      setNewchats([...newChatsRef.current])
+      setTimeout(() => {
+        match.status = 'finish'
+        match.content[0].img = ''
+        match.content[0].text = ''
+        setNewchats([...newChatsRef.current])
+      }, 2000) // 延时一下再改变状态，优化打字输出效果
     }
   }
 

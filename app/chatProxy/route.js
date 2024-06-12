@@ -28,22 +28,8 @@ async function* makeIterator() {
   yield encoder.encode("<p>Three</p>");
 }
 
-function getDataStream() {
-  return fetch("https://baidu.com?wd=123")
-    .then((response) => response.body)
-}
-
 export async function POST() {
   const iterator = makeIterator()
   const stream = iteratorToStream(iterator)
-  console.log('~~~~~~~~~~~~stream =', stream)
-
   return new Response(stream)
-    // const body = await getDataStream()
-
-    // return new Response(body, {
-    //     headers: {
-    //         "Content-Type": "text/event-stream"
-    //     }
-    // })
 }

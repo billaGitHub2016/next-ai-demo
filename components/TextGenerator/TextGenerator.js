@@ -7,10 +7,10 @@ import Image from "next/image";
 
 import TextGeneratorData from "../../data/dashboard.json";
 import Reaction from "../Common/Reaction";
+import './text-typing.css';
 
 const TextGenerator = (props) => {
   const { chats } = props;
-  debugger
 
   useEffect(() => {
     sal();
@@ -26,6 +26,14 @@ const TextGenerator = (props) => {
         bgflashlight.style.setProperty("--y", y + "px");
       };
     });
+
+    const typingChat = chats.find(item => item.status === 'typing')
+    if (typingChat) {
+      const typingText = document.querySelector(`#text-typing-${typingChat.id}`)
+      printText(typingText, typingChat.content[0].typingText)
+    } else {
+      setPrintTextEnd()
+    }
   }, [chats]);
 
   return (
@@ -115,7 +123,11 @@ const ChatBox = (props) => {
                 ) : (
                   ""
                 )}
-                <p className="mb--20">{innerData.desc}</p>
+                { data.status === 'finish' && <p className="mb--20">{innerData.desc}</p> }
+                { data.status === 'typing' && <p className="mb--20">
+                    {innerData.lastDesc}
+                    <span id={`text-typing-${data.id}`}></span>
+                  </p> }
                 <Reaction />
               </div>
             </div>
@@ -124,6 +136,54 @@ const ChatBox = (props) => {
       </div>
     </div>
   )
+}
+
+/**
+ * @description:
+ * @param {HTMLElement} dom - 打印内容的dom
+ * @param {string} content - 打印文本内容
+ * @param {number} speed - 打印速度
+ * @return {void}
+ */
+let printtingTimer = null
+function printText(dom, content, speed = 50) {
+  if (printtingTimer) {
+    clearInterval(printtingTimer)
+  }
+  dom.innerText = ''
+  let index = 0
+  setCursorStatus(dom, 'typing')
+  printtingTimer = setInterval(() => {
+    dom.innerText += content[index]
+    index++
+    if (index >= content.length) {
+      clearInterval(printtingTimer)
+    }
+  }, speed)
+}
+
+function setPrintTextEnd() {
+  const allTypingDom = document.querySelectorAll('.typing')
+  allTypingDom.forEach(d => {
+    setCursorStatus(d, 'end')
+  })
+}
+
+/**
+ * @description: 设置dom的光标状态
+ * @param {HTMLElement} dom - 打印内容的dom
+ * @param {"loading"|"typing"|"end"} status - 打印状态
+ * @return {void}
+ */
+function setCursorStatus(dom, status) {
+  const classList = {
+    loading: 'typing blinker',
+    typing: 'typing blinker',
+    end: '',
+  }
+  if (dom) {
+    dom.className = classList[status]
+  }
 }
 
 export default TextGenerator;
