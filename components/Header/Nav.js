@@ -3,18 +3,41 @@
 import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from 'react-toastify';
 
 import DashboardItem from "../../data/header.json";
 
 import menuImg from "../../public/images/menu-img/menu-img-2.png";
 import { useAppContext } from "@/context/Context";
+import { removeUserCache } from '../../utils/auth'
 
 const Nav = () => {
   const pathname = usePathname();
-  const { showItem, setShowItem } = useAppContext();
+  const { showItem, setShowItem, user, setUser } = useAppContext();
+  const router = useRouter();
 
   const isActive = (href) => pathname.startsWith(href);
+
+  const onSignout = async () => {
+    try {
+      const res = await fetch('/apis/signout', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      
+      if (res.code === '0') {
+        toast.success(res.message);
+        router.push('/authPage')
+        setUser(null)
+        removeUserCache()
+      }
+
+    } catch(err) {
+      toast.error('登出失败');
+    }
+  }
 
   return (
     <>
@@ -66,10 +89,15 @@ const Nav = () => {
           <Link href="/pricing">Pricing</Link>
         </li> */}
         <li>
-        <Link href="/AuthPage">
+        { 
+          user ? (<a href="#" onClick={onSignout}>
               <i className="feather-log-out"></i>
               <span>登出</span>
-            </Link>
+            </a>) : (<Link href="/authPage">
+              <i className="feather-log-out"></i>
+              <span>登入</span>
+            </Link>)
+        }
         </li>
       </ul>
     </>

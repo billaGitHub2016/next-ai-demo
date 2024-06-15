@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { setUserCache, getUserCache } from '../utils/auth'
 
 export const CreateContext = createContext();
 
@@ -11,6 +12,7 @@ const Context = ({ children }) => {
   const [toggleAuth, setToggleAuth] = useState(true);
   const [showItem, setShowItem] = useState(true);
   const [activeMobileMenu, setActiveMobileMenu] = useState(true);
+  const [user, setUser] = useState(getUserCache());
 
   const checkScreenSize = () => {
     if (window.innerWidth < 1200) {
@@ -22,9 +24,29 @@ const Context = ({ children }) => {
     }
   };
 
+  // 拉取用户数据
+  const fetchUer = async () => {
+    try {
+      const res = await fetch('/apis/signin', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        cache: 'no-store'
+      }).then(res => res.json())
+      if (res.code === '0') {
+        setUser(res.data.user)
+        setUserCache(res.data.user)
+      }
+    } catch (error) {
+      
+    }
+  }
+
   useEffect(() => {
     checkScreenSize();
     window.addEventListener("resize", checkScreenSize);
+
+    fetchUer();
 
     return () => {
       window.removeEventListener("resize", checkScreenSize);
@@ -50,7 +72,9 @@ const Context = ({ children }) => {
         rightBar,
         setRightBar,
         shouldCollapseLeftbar,
-        shouldCollapseRightbar
+        shouldCollapseRightbar,
+        user,
+        setUser,
       }}
     >
       {children}

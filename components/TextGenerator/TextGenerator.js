@@ -27,13 +27,13 @@ const TextGenerator = (props) => {
       };
     });
 
-    const typingChat = chats.find(item => item.status === 'typing')
-    if (typingChat) {
-      const typingText = document.querySelector(`#text-typing-${typingChat.id}`)
-      printText(typingText, typingChat.content[0].typingText)
-    } else {
-      setPrintTextEnd()
-    }
+    // const typingChat = chats.find(item => item.status === 'typing')
+    // if (typingChat) {
+    //   const typingText = document.querySelector(`#text-typing-${typingChat.id}`)
+    //   printText(typingText, typingChat.content[0].typingText)
+    // } else {
+    //   setPrintTextEnd()
+    // }
   }, [chats]);
 
   return (
@@ -123,11 +123,12 @@ const ChatBox = (props) => {
                 ) : (
                   ""
                 )}
-                { data.status === 'finish' && <p className="mb--20">{innerData.desc}</p> }
-                { data.status === 'typing' && <p className="mb--20">
+                {/* { data.status === 'finish' && <p className="mb--20">{innerData.desc}</p> } */}
+                {/* { data.status === 'typing' && <p className="mb--20">
                     {innerData.lastDesc}
                     <span id={`text-typing-${data.id}`}></span>
-                  </p> }
+                  </p> } */}
+                  <div dangerouslySetInnerHTML={{ __html: innerData.desc }} />
                 <Reaction />
               </div>
             </div>

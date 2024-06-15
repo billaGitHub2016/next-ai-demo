@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import "bootstrap/scss/bootstrap.scss";
 
@@ -23,6 +25,18 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="" suppressHydrationWarning={true}>
         {children}
+        {<ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover
+          theme="dark"
+        />}
       </body>
     </html>
   );

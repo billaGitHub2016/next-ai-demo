@@ -6,7 +6,9 @@ const Form = (props) => {
   const [message, setMessage] = useState("");  
   
   const handleSendMessage = async (e) => {
-    e.preventDefault();  
+    if (e) {
+      e.preventDefault();  
+    }
   
     if (!message.trim()) {  
       alert("Please enter a message.");  
@@ -26,14 +28,15 @@ const Form = (props) => {
         'user_id': '12',
         'flag':'1'
       };
+
       const signature = createSignature(params);  
       const params_for_posting={...params,'signature':signature}
-      const response = await fetch("/chatProxy", {  
-        method: "POST",  
+      const query = new URLSearchParams(params_for_posting).toString();
+      const response = await fetch(`/chatProxy?${query}`, {  
+        method: "GET",  
         headers: {  
           "Content-Type": "text/event-stream",  
         },  
-        body: JSON.stringify({ params_for_posting }),  
       });  
       console.log('before the response..')
       console.log(response)
@@ -60,11 +63,34 @@ const Form = (props) => {
                 console.log(done, value);
                 const decodeValue = utf8decoder.decode(value)
                 console.log(decodeValue);
-                chunks += decodeValue;
+                const removeFormatValue = decodeValue.replace(/data:/ig, '');
+                const removeSpacesInTags = (htmlString) => {
+                  // 正则表达式匹配所有HTML标签，并去除标签名中的空格
+                  return htmlString.replace(/<\s*(\w+)(\s*[^>]*)?>/g, (match, tagName, rest) => {
+                    // 去除标签名中的空格
+                    const cleanTagName = tagName.replace(/\s+/g, '');
+                    // 重组标签，去除空格
+                    return `<${cleanTagName}${rest ? rest : ''}>`;
+                  });
+                }
+                // const removeSpacesInHref = (htmlString) => {
+                //   const regex = /<a\s?\\n?href="([^"]*)">/;
+                //   const match = htmlString.match(regex);
+
+                //   if (match) {
+                //     // 去除匹配到的href值中的所有空白字符（包括换行符）
+                //     const hrefValue = match[1].replace(/[\r\n\t ]+/g, '');
+                //     console.log(hrefValue);
+                //   }
+                // }
+                let formatTagValue = removeSpacesInTags(removeFormatValue)
+                // const formatHrefValue = removeSpacesInHref(formatTagValue)
+                console.log('formatTagValue = ', formatTagValue);
+                chunks += formatTagValue
 
                 props.onResponse({
                   id: topicId,
-                  text: decodeValue
+                  text: formatTagValue
                 });
                 
                 push();
@@ -102,6 +128,11 @@ const Form = (props) => {
           placeholder="Send a message..."  
           value={message}  
           onChange={(e) => setMessage(e.target.value)}
+          onKeyUp={(e) => {
+            if (e.key === 'Enter') {
+              handleSendMessage()
+            }
+          }}
         ></textarea>  
         <div className="left-icons">  
           <div title="ChatenAI" className="form-icon icon-gpt">  
@@ -114,7 +145,7 @@ const Form = (props) => {
             data-tooltip-id="my-tooltip"  
             data-tooltip-content="Choose File"  
           >  
-            <input type="file" className="input-file" name="myfile" multiple />  
+            <input type="file" className="input-file" name="myfile" multiple/>  
             <i className="feather-plus-circle"></i>  
           </div>  
           <a  
@@ -128,7 +159,8 @@ const Form = (props) => {
             type="submit"  
             className="form-icon icon-send"  
             data-tooltip-id="my-tooltip"  
-            data-tooltip-content="Send message"  
+            data-tooltip-content="Send message"
+
           >  
             <i className="feather-send"></i>  
           </button>  

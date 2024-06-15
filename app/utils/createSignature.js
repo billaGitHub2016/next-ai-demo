@@ -1,7 +1,7 @@
 import crypto from 'crypto';  
   
 export function createSignature(params) {  
-  const key = 'chat_k6rkzsgcgizsn1b9';  
+  const key = 'chat_0edDxanB3Th0sC0P';  
   
   if (!key) {  
     throw new Error('Missing secret key');  
