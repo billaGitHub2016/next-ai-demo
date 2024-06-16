@@ -41,13 +41,13 @@ const TextGenerator = (props) => {
       {/* {TextGeneratorData &&
         TextGeneratorData.textGenerator.map((data, index) => (<ChatBox data={data} key={index}/>))} */}
       {chats &&
-        chats.map((data) => (<ChatBox data={data} key={data.id}/>))}
+        chats.map((data) => (<ChatBox data={data} key={data.id} onRegenerate={props.onRegenerate}/>))}
     </>
   );
 };
 
 const ChatBox = (props) => {
-  const { data } = props
+  const { data, onRegenerate } = props
   return (
     <div
       className="chat-box-list pt--30"
@@ -129,7 +129,7 @@ const ChatBox = (props) => {
                     <span id={`text-typing-${data.id}`}></span>
                   </p> } */}
                   <div dangerouslySetInnerHTML={{ __html: innerData.desc }} />
-                <Reaction />
+                <Reaction onRegenerate={onRegenerate.bind(null, data)}/>
               </div>
             </div>
           </div>

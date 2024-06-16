@@ -2,12 +2,47 @@
 
 import React, { useEffect, useState } from "react";
 import sal from "sal.js";
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Items from "../Dashboard/items";
 import Link from "next/link";
 
-const Modal = () => {
+const Modal = (props) => {
   const [selectedValues, setSelectedValues] = useState([]);
+
+  const { register: topicRegister, handleSubmit: topicHandleSubmit, formState: { errors }, reset: resetTopicForm } = useForm({
+    defaultValues: {
+      topic: '',
+    },
+    mode: 'onBlur'
+  });
+  const onToppicSubmit = async (data) => { 
+    console.log('onToppicSubmit data = ', data)
+    const res = await fetch('/apis/topic', {
+      method: "POST",
+      body: JSON.stringify({ topic: { title: data.topic } }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store'
+    }).then(res => res.json()).catch(err => {
+      return {
+        message: err.message,
+      }
+    })
+    if (res.code === '0') {
+      props.onTopicSubmit({ topic: res.data.topic })
+      toast.success(res.message)
+      resetTopicForm()
+      const btn = document.querySelector('[data-bs-dismiss="modal"]')
+      if (btn) {
+        btn.click()
+      }
+    } else {
+      toast.error(res.message)
+    }
+  };
 
   const handleChange = (event) => {
     const selectedOptions = Array.from(
@@ -37,12 +72,29 @@ const Modal = () => {
               data-sal-duration="400"
               data-sal-delay="150"
             >
-              <h3 className="title mb--0 w-600">Unlock the power of AI</h3>
+              <h3 className="title mb--0 w-600">添加新的话题</h3>
             </div>
             <div className="genarator-section">
-              <ul className="genarator-card-group">
+              {/* <ul className="genarator-card-group">
                 <Items />
-              </ul>
+              </ul> */}
+              <form onSubmit={topicHandleSubmit(onToppicSubmit)}>
+                  <div className='input-section mail-section'>
+                      <input
+                          style={{ height: '60px'}}
+                          name='topic'
+                          {...topicRegister('topic', {
+                            required: {
+                              value: true,
+                              message: '请填主题'
+                            },
+                          })}
+                          type='text'
+                          placeholder='请填写主题，按回车提交'
+                      />
+                      {errors.topic && <p style={{ textAlign: 'left', color: 'red', marginTop: '10px' }}>{errors.topic.message}</p>}
+                  </div>
+              </form>
             </div>
             <button className="close-button" data-bs-dismiss="modal">
               <i className="feather-x"></i>

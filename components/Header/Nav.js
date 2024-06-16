@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -16,6 +16,11 @@ const Nav = () => {
   const pathname = usePathname();
   const { showItem, setShowItem, user, setUser } = useAppContext();
   const router = useRouter();
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const isActive = (href) => pathname.startsWith(href);
 
@@ -90,7 +95,7 @@ const Nav = () => {
         </li> */}
         <li>
         { 
-          user ? (<a href="#" onClick={onSignout}>
+          isClient && user ? (<a href="#" onClick={onSignout}>
               <i className="feather-log-out"></i>
               <span>登出</span>
             </a>) : (<Link href="/authPage">

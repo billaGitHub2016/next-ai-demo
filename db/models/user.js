@@ -28,6 +28,7 @@ function user(sequelize) {
 
   User.associate = function(models) {
     User.hasMany(models.topic, { foreignKey: 'userId' });
+    User.hasMany(models.topicLog, { foreignKey: 'userId' });
   }
 
   return User

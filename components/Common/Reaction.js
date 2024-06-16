@@ -1,12 +1,12 @@
 import React from 'react'
 
-const Reaction = () => {
+const Reaction = (props) => {
   return (
     <>
       <div className="reaction-section">
         <div className="btn-grp">
           <div className="left-side-btn dropup">
-            <button
+            {/* <button
               data-bs-toggle="modal"
               data-bs-target="#likeModal"
               className="react-btn btn-default btn-small btn-border me-2"
@@ -56,10 +56,10 @@ const Reaction = () => {
                   <i className="feather-trash-2"></i> Delete Chat
                 </a>
               </li>
-            </ul>
-          </div>
+            </ul>*/}
+          </div> 
           <div className="right-side-btn">
-            <button className="react-btn btn-default btn-small btn-border">
+            <button className="react-btn btn-default btn-small btn-border" onClick={props.onRegenerate}>
               <i className="feather-repeat"></i>
               <span>Regenerate</span>
             </button>

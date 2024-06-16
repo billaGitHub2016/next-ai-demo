@@ -51,7 +51,7 @@ const UserAuth = () => {
         if (searchParams.get('to')) {
           router.push(searchParams.get('to'))
         } else {
-          router.push('/text-generate')
+          router.push('text-generator')
         }
       } else {
         toast.error(res.message)

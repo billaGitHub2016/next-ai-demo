@@ -13,6 +13,6 @@ export const getUserByJwt = async (token) => {
   console.log('token = ', token)
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   console.log('decoded = ', decoded)
-  const user = await db.user.findOne({ where: { id: decoded.sub }, attributes: ['email', 'avatar'], raw: true });
+  const user = await db.user.findOne({ where: { id: decoded.sub }, attributes: ['id', 'email', 'avatar'], raw: true });
   return user;
 }

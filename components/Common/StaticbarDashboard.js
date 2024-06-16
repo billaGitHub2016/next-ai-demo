@@ -1,11 +1,17 @@
 import Form from "@/app/Form";
-import React from "react";
+import React, { useImperativeHandle, useRef, forwardRef } from "react";
 
-const StaticbarDashboard = (props) => {
+const StaticbarDashboard = forwardRef((props, ref) => {
+  const messageForm = useRef(null);
+
+  useImperativeHandle(ref, () => ({
+    messageForm,
+  }))
+  
   return (
     <>
       <div className="rbt-static-bar">
-        <Form {...props} />
+        <Form {...props} ref={messageForm}/>
 
         <p className="b3 small-text">
           ChatenAi can make mistakes. Consider checking important information.
@@ -13,6 +19,6 @@ const StaticbarDashboard = (props) => {
       </div>
     </>
   );
-};
+});
 
 export default StaticbarDashboard;

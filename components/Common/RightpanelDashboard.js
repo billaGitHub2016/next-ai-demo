@@ -1,145 +1,114 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState,  } from 'react';
+import ReactLoading from 'react-loading';
+import RightPanelData from '../../data/dashboard.json';
+import SingleRightPanel from './Props/SingleRightPanel';
+import { useAppContext } from '@/context/Context';
 
-import RightPanelData from "../../data/dashboard.json";
-import SingleRightPanel from "./Props/SingleRightPanel";
-import { useAppContext } from "@/context/Context";
+const RightpanelDashboard = (props) => {
+    const { shouldCollapseRightbar } = useAppContext();
+    const [sectionStates, setSectionStates] = useState({
+        previous: true,
+        yesterday: true,
+        older: true,
+    });
+    const [historyTopics, setHistoryTopics] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-const RightpanelDashboard = () => {
-  const { shouldCollapseRightbar } = useAppContext();
-  const [sectionStates, setSectionStates] = useState({
-    previous: true,
-    yesterday: true,
-    older: true,
-  });
+    const toggleSection = section => {
+        setSectionStates(prevState => ({
+            ...prevState,
+            [section]: !prevState[section],
+        }));
+    };
 
-  const toggleSection = (section) => {
-    setSectionStates((prevState) => ({
-      ...prevState,
-      [section]: !prevState[section],
-    }));
-  };
-  return (
-    <>
-      <div
-        className={`rbt-right-side-panel popup-dashboardright-section ${
-          shouldCollapseRightbar ? "collapsed" : ""
-        }`}
-      >
-        <div className="right-side-top">
-          <a
-            className="btn-default bg-solid-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#newchatModal"
-          >
-            <span className="icon">
-              <i className="feather-plus-circle"></i>
-            </span>
-            <span>New Chat</span>
-          </a>
-        </div>
-        <div className="right-side-bottom">
-          <div className="small-search search-section mb--20">
-            <input type="search" placeholder="Search Here..." />
-            <i className="feather-search"></i>
-          </div>
+    const getHistoryTopics = async () => {
+        setLoading(true);
+        const searchParams = {
+            pageNo: 1,
+            pageSize: 5,
+        };
+        const urlParams = new URLSearchParams(searchParams).toString();
+        const res = await fetch(`/apis/topic${urlParams ? '?' + urlParams : ''}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store',
+        })
+            .then(res => res.json())
+            .catch(err => {
+                return {
+                    message: err.message,
+                };
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+        if (res.code === '0') {
+            setHistoryTopics(res.data.list);
+        }
+    };
 
-          <div className="chat-history-section">
-            <h6 className="title">Today</h6>
-            <ul className="chat-history-list">
-              {RightPanelData &&
-                RightPanelData.rightPanel.map((data, index) => (
-                  <SingleRightPanel
-                    {...data}
-                    key={index}
-                    RightPanelData={data.today}
-                  />
-                ))}
-            </ul>
-          </div>
+    useEffect(() => {
+        getHistoryTopics();
+    }, []);
 
-          <div
-            className={`chat-history-section has-show-more ${
-              !sectionStates.yesterday ? "active" : ""
-            }`}
-          >
-            <h6 className="title">Yesterday</h6>
-            <ul className="chat-history-list has-show-more-inner-content">
-              {RightPanelData &&
-                RightPanelData.rightPanel.map((data, index) => (
-                  <SingleRightPanel
-                    {...data}
-                    key={index}
-                    RightPanelData={data.yesterday}
-                  />
-                ))}
-            </ul>
+    return (
+        <>
             <div
-              className={`rbt-show-more-btn ${
-                !sectionStates.yesterday ? "active" : ""
-              }`}
-              onClick={() => toggleSection("yesterday")}
+                className={`rbt-right-side-panel popup-dashboardright-section ${
+                    shouldCollapseRightbar ? 'collapsed' : ''
+                }`}
             >
-              Show More
-            </div>
-          </div>
+                <div className='right-side-top'>
+                    <a
+                        className='btn-default bg-solid-primary'
+                        data-bs-toggle='modal'
+                        data-bs-target='#newchatModal'
+                    >
+                        <span className='icon'>
+                            <i className='feather-plus-circle'></i>
+                        </span>
+                        <span>New Chat</span>
+                    </a>
+                </div>
+                <div className='right-side-bottom'>
+                    {/* <div className='small-search search-section mb--20'>
+                        <input type='search' placeholder='Search Here...' />
+                        <i className='feather-search'></i>
+                    </div> */}
 
-          <div
-            className={`chat-history-section has-show-more ${
-              !sectionStates.previous ? "active" : ""
-            }`}
-          >
-            <h6 className="title">Previous 7 days</h6>
-            <ul className="chat-history-list has-show-more-inner-content">
-              {RightPanelData &&
-                RightPanelData.rightPanel.map((data, index) => (
-                  <SingleRightPanel
-                    {...data}
-                    key={index}
-                    RightPanelData={data.previous}
-                  />
-                ))}
-            </ul>
-            <div
-              className={`rbt-show-more-btn ${
-                !sectionStates.previous ? "active" : ""
-              }`}
-              onClick={() => toggleSection("previous")}
-            >
-              Show More
+                    <div className='chat-history-section'>
+                        <h6 className='title'>
+                            历史会话{' '}
+                            {loading && (
+                                <ReactLoading
+                                    style={{ height: '20px', width: '20px', marginRight: '10px' }}
+                                    type='spin'
+                                    color='#fff'
+                                />
+                            )}
+                        </h6>
+                        <ul className='chat-history-list'>
+                            {historyTopics &&
+                                historyTopics.map(data => (
+                                    <SingleRightPanel
+                                        topic={props.topic}
+                                        onTopicClick={props.onTopicClick}
+                                        {...data}
+                                        key={data.id}
+                                        RightPanelData={data}
+                                        data-id={data.id}
+                                    />
+                                ))}
+                        </ul>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div
-            className={`chat-history-section has-show-more ${
-              !sectionStates.older ? "active" : ""
-            }`}
-          >
-            <h6 className="title">November</h6>
-            <ul className="chat-history-list has-show-more-inner-content">
-              {RightPanelData &&
-                RightPanelData.rightPanel.map((data, index) => (
-                  <SingleRightPanel
-                    {...data}
-                    key={index}
-                    RightPanelData={data.older}
-                  />
-                ))}
-            </ul>
-            <div
-              className={`rbt-show-more-btn mb--100 ${
-                !sectionStates.older ? "active" : ""
-              }`}
-              onClick={() => toggleSection("older")}
-            >
-              Show More
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 };
 
 export default RightpanelDashboard;

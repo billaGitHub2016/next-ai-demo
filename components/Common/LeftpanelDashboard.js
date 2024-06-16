@@ -13,7 +13,7 @@ import { useAppContext } from "@/context/Context";
 
 const LeftpanelDashboard = () => {
   const pathname = usePathname();
-  const { shouldCollapseLeftbar } = useAppContext();
+  const { shouldCollapseLeftbar, user } = useAppContext();
 
   const isActive = (href) => pathname.startsWith(href);
 
@@ -143,13 +143,14 @@ const LeftpanelDashboard = () => {
                     className="w-100"
                     width={40}
                     height={40}
-                    src={avatar}
+                    // src={avatar}
+                    src={user?.avatar || avatar}
                     alt="Author"
                   />
                 </div>
                 <div className="author-desc">
-                  <h6>Rafi Dev</h6>
-                  <p>trentadam@net</p>
+                  {/* <h6>Rafi Dev</h6> */}
+                  <p>{user?.email}</p>
                 </div>
                 <div className="author-badge">Free</div>
               </Link>

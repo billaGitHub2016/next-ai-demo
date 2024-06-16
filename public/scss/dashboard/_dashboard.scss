@@ -538,23 +538,23 @@
             }
             &:hover{
                 background: var(--color-blackest);
-                .more-info-icon{
-                    opacity: 0.8;
-                    visibility: visible;
-                    &:hover{
-                        opacity: 1;
-                    }
-                }
+                // .more-info-icon{
+                //     opacity: 0.8;
+                //     visibility: visible;
+                //     &:hover{
+                //         opacity: 1;
+                //     }
+                // }
             }
             &.active{
                 background: var(--color-blackest);
-                .more-info-icon{
-                    opacity: 0.8;
-                    visibility: visible;
-                    &:hover{
-                        opacity: 1;
-                    }
-                }
+                // .more-info-icon{
+                //     opacity: 0.8;
+                //     visibility: visible;
+                //     &:hover{
+                //         opacity: 1;
+                //     }
+                // }
             }
         }
     }

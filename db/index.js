@@ -24,3 +24,4 @@ const sequelize = new Sequelize(database, user, password, { host, port, dialect:
 db.sequelize = sequelize;
 db.user = require('./models/user')(sequelize);
 db.topic = require('./models/topic')(sequelize);
+db.topicLog = require('./models/topicLog')(sequelize);

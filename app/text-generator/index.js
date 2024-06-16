@@ -9,10 +9,17 @@ import Modal from "@/components/Common/Modal";
 import TextGenerator from "@/components/TextGenerator/TextGenerator";
 import StaticbarDashboard from "@/components/Common/StaticbarDashboard";
 import { useCallback, useState, useRef, useEffect } from "react";
+import { toast } from 'react-toastify';
+import ReactLoading from "react-loading";
+import { getUserCache } from '../../utils/auth'
 
 const TextGeneratorPage = () => {
   const newChatsRef = useRef([]);
   const [newChats, setNewchats] = useState([]);
+  const [currentTopic, setCurrentTopic] = useState(null)
+  const user = getUserCache()
+  const messageFormRef = useRef(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const html = document.getElementsByTagName('html')[0]
@@ -25,7 +32,8 @@ const TextGeneratorPage = () => {
   const onStartChat = (params) => {
     const newChat = {
       id: params.id,
-      author: "/images/team/team-01.jpg",
+      // author: "/images/team/team-01.jpg",
+      author: user ? user.avatar : "/images/team/team-01.jpg",
       title: "You",
       desc: params.topic,
       status: 'start',
@@ -33,7 +41,8 @@ const TextGeneratorPage = () => {
         {
           "img": "/images/icons/loader-one.gif",
           "text": "Generating answers for you…",
-          "aiImg": "/images/team/avater.png",
+          // "aiImg": "/images/team/avater.png",
+          "aiImg": "/images/ai-avater.png",
           "title": "ChatenAI",
           "badge": "Bot",
           "desc": ''
@@ -70,6 +79,59 @@ const TextGeneratorPage = () => {
     }
   }
 
+  const onTopicSubmit = (params) => {
+    setNewchats([])
+    setCurrentTopic(params.topic)
+  }
+
+  const onRegenerate = (log) => {
+    messageFormRef.current?.messageForm.current?.regenerateMessage(log.desc)
+  }
+
+  const getHistoryTopicLogs = async (id) => {
+    setLoading(true);
+    setCurrentTopic({ id });
+    const searchParams = {
+        pageNo: 1,
+        pageSize: 100,
+        topicId: id
+    };
+    const urlParams = new URLSearchParams(searchParams).toString();
+    const res = await fetch(`/apis/topicLog${urlParams ? '?' + urlParams : ''}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+    })
+        .then(res => res.json())
+        .catch(err => {
+            return {
+                message: err.message,
+            };
+        })
+        .finally(() => {
+            setLoading(false);
+        });
+    if (res.code === '0') {
+      if (res.data.list.length > 0) {
+        debugger
+        const chats = convertTipicLogToChats(res.data.list, user)
+        setNewchats(chats);
+        newChatsRef.current = chats
+      } else {
+        toast('当前会话没有纪录');
+      }
+    } else {
+      toast.error(res.message);
+    }
+};
+  
+  const onTopicClick = (id) => {
+    debugger
+    getHistoryTopicLogs(id)
+  }
+
   return (
     <>
       <main className="page-wrapper rbt-dashboard-page">
@@ -78,16 +140,16 @@ const TextGeneratorPage = () => {
             <HeaderDashboard display="" />
             <PopupMobileMenu />
             <LeftpanelDashboard />
-            <RightpanelDashboard />
-            <Modal />
+            <RightpanelDashboard onTopicClick={onTopicClick} topic={currentTopic}/>
+            <Modal onTopicSubmit={onTopicSubmit}/>
 
             <div className="rbt-main-content">
               <div className="rbt-daynamic-page-content">
                 <div className="rbt-dashboard-content">
                   <div className="content-page">
-                    <TextGenerator chats={newChats}/>
+                    <TextGenerator chats={newChats} onRegenerate={onRegenerate}/>
                   </div>
-                  <StaticbarDashboard onStartChat={ onStartChat } onResponse={onResponse} onFinishChat={onFinishChat}/>
+                  <StaticbarDashboard onStartChat={ onStartChat } onResponse={onResponse} onFinishChat={onFinishChat} topic={currentTopic}  ref={messageFormRef}/>
                 </div>
               </div>
             </div>
@@ -97,5 +159,29 @@ const TextGeneratorPage = () => {
     </>
   );
 };
+
+function convertTipicLogToChats(logs, user) {
+  return logs.map(log => {
+    const newChat = {
+      id: log.id,
+      author: user ? user.avatar : "/images/team/team-01.jpg",
+      title: "You",
+      desc: log.question,
+      status: 'finish',
+      content: [
+        {
+          "img": "",
+          "text": "",
+          // "aiImg": "/images/team/avater.png",
+          "aiImg": "/images/ai-avater.png",
+          "title": "ChatenAI",
+          "badge": "Bot",
+          "desc": log.answer
+        }
+      ]
+    }
+    return newChat
+  })
+}
 
 export default TextGeneratorPage;
