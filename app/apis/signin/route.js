@@ -21,7 +21,7 @@ export async function POST(request) {
             }),
             {
                 headers: {
-                    'Set-Cookie': `jwt=${result.token}; Max-Age=${maxAge}; Path=/; HttpOnly; Secure; SameSite=Strict`,
+                    'Set-Cookie': `jwt=${result.token}; Max-Age=${maxAge}; Path=/; HttpOnly; SameSite=Strict`,
                     'Content-type': 'application/json',
                 },
             }
