@@ -43,14 +43,8 @@ export async function GET(request) {
 
   let apiUrl = `http://13.73.239.158:3000/proxyChat?message=${encodeURI(message)}&user_id=${encodeURI(user_id)}&flag=${encodeURI(flag)}&sign=${encodeURI(signature)}`
   if (process.env.RUN_ENV !== "DEV") {
-
+    apiUrl = `http://104.46.232.133/api/demo/chat?message=${encodeURIComponent(message)}&user_id=${encodeURIComponent(user_id)}&sign=${encodeURIComponent(sign)}&flag=${encodeURIComponent(flag)}`; 
   }
-  const stream = await fetch(apiUrl, {
-    method: "GET",
-    headers: {
-      "Content-Type": "text/event-stream",  
-    }
-  }).then(res => res.body)
-
-  return new Response(stream)
+  
+  chat_0edDxanB3Th0sC0P
 }

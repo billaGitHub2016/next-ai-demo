@@ -64,7 +64,11 @@ const Form = forwardRef((props, ref) => {
                 console.log(done, value);
                 const decodeValue = utf8decoder.decode(value)
                 console.log(decodeValue);
-                const removeFormatValue = decodeValue.replace(/data:/ig, '');
+                let removeFormatValue = decodeValue;
+                const regex = /data:|\\n\\n/gm;
+                removeFormatValue = removeFormatValue.replace(regex, '');
+                removeFormatValue = removeFormatValue.replace(/\\n\\n/gm, '');
+                // const removeFormatValue = decodeValue.replace(/data:[^]*?\n\n/gm, '');
                 const removeSpacesInTags = (htmlString) => {
                   // 正则表达式匹配所有HTML标签，并去除标签名中的空格
                   return htmlString.replace(/<\s*(\w+)(\s*[^>]*)?>/g, (match, tagName, rest) => {
@@ -74,24 +78,12 @@ const Form = forwardRef((props, ref) => {
                     return `<${cleanTagName}${rest ? rest : ''}>`;
                   });
                 }
-                // const removeSpacesInHref = (htmlString) => {
-                //   const regex = /<a\s?\\n?href="([^"]*)">/;
-                //   const match = htmlString.match(regex);
-
-                //   if (match) {
-                //     // 去除匹配到的href值中的所有空白字符（包括换行符）
-                //     const hrefValue = match[1].replace(/[\r\n\t ]+/g, '');
-                //     console.log(hrefValue);
-                //   }
-                // }
-                let formatTagValue = removeSpacesInTags(removeFormatValue)
-                // const formatHrefValue = removeSpacesInHref(formatTagValue)
-                console.log('formatTagValue = ', formatTagValue);
-                chunks += formatTagValue
+                removeFormatValue = removeSpacesInTags(removeFormatValue);
+                chunks += removeFormatValue
 
                 props.onResponse({
                   id: topicId,
-                  text: formatTagValue
+                  text: removeFormatValue
                 });
                 
                 push();
@@ -186,7 +178,7 @@ const Form = forwardRef((props, ref) => {
                 console.log(done, value);
                 const decodeValue = utf8decoder.decode(value)
                 console.log(decodeValue);
-                const removeFormatValue = decodeValue.replace(/data:/ig, '');
+                const removeFormatValue = decodeValue.replace(/data:[^]*?\n\n/gm, '');
                 const removeSpacesInTags = (htmlString) => {
                   // 正则表达式匹配所有HTML标签，并去除标签名中的空格
                   return htmlString.replace(/<\s*(\w+)(\s*[^>]*)?>/g, (match, tagName, rest) => {
