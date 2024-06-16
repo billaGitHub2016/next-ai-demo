@@ -115,7 +115,6 @@ const TextGeneratorPage = () => {
         });
     if (res.code === '0') {
       if (res.data.list.length > 0) {
-        debugger
         const chats = convertTipicLogToChats(res.data.list, user)
         setNewchats(chats);
         newChatsRef.current = chats
@@ -128,7 +127,6 @@ const TextGeneratorPage = () => {
 };
   
   const onTopicClick = (id) => {
-    debugger
     getHistoryTopicLogs(id)
   }
 
