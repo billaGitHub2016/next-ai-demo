@@ -4,6 +4,8 @@ import { createSignature } from '@/app/utils/createSignature'
 
 const Form = forwardRef((props, ref) => {
   const [message, setMessage] = useState("");  
+  const [loading, setLoading] = useState(false)
+  const textInputRef = useRef()
 
   const handleSendMessage = async (e) => {
     if (e) {
@@ -15,16 +17,20 @@ const Form = forwardRef((props, ref) => {
       return;  
     }
 
+    const messgeCopy = message.trim()
+    setMessage('') // Clear the textarea after sending the message
+    setLoading(true)
+
     const topicId = new Date().getTime();
     props.onStartChat({
       id: topicId,
-      topic: message.trim()
+      topic: messgeCopy
     })
   
     try {  
       console.log('inside the hanlde message fun')
       const params = {
-        'message':message.trim(),
+        'message':messgeCopy,
         'user_id': '12',
         'flag':'1'
       };
@@ -105,10 +111,14 @@ const Form = forwardRef((props, ref) => {
   
       // const data = await response.json();
       // console.log("Message sent successfully:", data);  
-      setMessage(""); // Clear the textarea after sending the message  
     } catch (error) {  
       console.error("Error sending message:", error);
-    }  
+    } finally {
+      setLoading(false)
+      setTimeout(() => {
+        textInputRef.current?.focus()
+      }, 100)
+    }
   };
   
   const regenerateMessage = async (message) => {
@@ -116,6 +126,8 @@ const Form = forwardRef((props, ref) => {
       alert("Please enter a message.");  
       return;  
     }
+
+    setLoading(true)
 
     const topicId = new Date().getTime();
     props.onStartChat({
@@ -199,7 +211,12 @@ const Form = forwardRef((props, ref) => {
       }) 
     } catch (error) {  
       console.error("Error regenerate message:", error);
-    }  
+    } finally {
+      setLoading(false)
+      setTimeout(() => {
+        textInputRef.current?.focus()
+      }, 100)
+    }
   }
 
   useImperativeHandle(ref, () => ({
@@ -209,17 +226,19 @@ const Form = forwardRef((props, ref) => {
   return (  
     <>  
       {/* <Tooltip id="my-tooltip" className="custom-tooltip tooltip-inner" />   */}
-      <form className="new-chat-form border-gradient" onSubmit={handleSendMessage}>  
+      <form className="new-chat-form border-gradient">  
         <textarea  
           rows="1"  
           placeholder="Send a message..."  
           value={message}  
           onChange={(e) => setMessage(e.target.value)}
+          disabled={loading}
           onKeyUp={(e) => {
             if (e.key === 'Enter') {
               handleSendMessage()
             }
           }}
+          ref={textInputRef}
         ></textarea>  
         <div className="left-icons">  
           <div title="ChatenAI" className="form-icon icon-gpt">  
@@ -247,7 +266,7 @@ const Form = forwardRef((props, ref) => {
             className="form-icon icon-send"  
             data-tooltip-id="my-tooltip"  
             data-tooltip-content="Send message"
-
+            disabled={loading}
           >  
             <i className="feather-send"></i>  
           </button>  
