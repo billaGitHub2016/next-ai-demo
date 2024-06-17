@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from 'react';
 
 import avatar from "../../public/images/team/team-01.jpg";
 
@@ -14,6 +15,11 @@ import { useAppContext } from "@/context/Context";
 const LeftpanelDashboard = () => {
   const pathname = usePathname();
   const { shouldCollapseLeftbar, user } = useAppContext();
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const isActive = (href) => pathname.startsWith(href);
 
@@ -139,18 +145,24 @@ const LeftpanelDashboard = () => {
             <div className="inner">
               <Link href="/profile-details" className="autor-info">
                 <div className="author-img active">
-                  <Image
+                  { isClient && user?.avatar ? <img alt="Author" style={{ height: '40px', width: '40px', borderRadius: '50%'}} src={user.avatar}/> : <Image
                     className="w-100"
                     width={40}
                     height={40}
-                    // src={avatar}
-                    src={user?.avatar || avatar}
+                    src={avatar}
                     alt="Author"
-                  />
+                  />}
+                  {/* <Image
+                    className="w-100"
+                    width={40}
+                    height={40}
+                    src={avatar}
+                    alt="Author"
+                  /> */}
                 </div>
                 <div className="author-desc">
                   {/* <h6>Rafi Dev</h6> */}
-                  <p>{user?.email}</p>
+                  <p>{isClient && user?.email}</p>
                 </div>
                 <div className="author-badge">Free</div>
               </Link>
