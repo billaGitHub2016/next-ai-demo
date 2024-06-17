@@ -53,7 +53,7 @@ export async function GET(request) {
             userId: user.id,
             pageSize: parseInt(pageSize1),
             pageNo: parseInt(pageNo1),
-            topicId
+            topicId: topicId === 'null' ? null : topicId
         });
 
         return new Response(

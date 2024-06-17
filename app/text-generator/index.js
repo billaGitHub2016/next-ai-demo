@@ -20,6 +20,7 @@ const TextGeneratorPage = () => {
   const user = getUserCache()
   const messageFormRef = useRef(null)
   const [loading, setLoading] = useState(false)
+  const historyTopicRef = useRef(null)
 
   useEffect(() => {
     const html = document.getElementsByTagName('html')[0]
@@ -82,6 +83,7 @@ const TextGeneratorPage = () => {
   const onTopicSubmit = (params) => {
     setNewchats([])
     setCurrentTopic(params.topic)
+    historyTopicRef.current?.getHistoryTopics()
   }
 
   const onRegenerate = (log) => {
@@ -114,13 +116,12 @@ const TextGeneratorPage = () => {
             setLoading(false);
         });
     if (res.code === '0') {
-      if (res.data.list.length > 0) {
-        const chats = convertTipicLogToChats(res.data.list, user)
-        setNewchats(chats);
-        newChatsRef.current = chats
-      } else {
-        toast('当前会话没有纪录');
+      if (res.data.list.length === 0) {
+        toast('当前会话没有纪录'); 
       }
+      const chats = convertTipicLogToChats(res.data.list, user)
+      setNewchats(chats);
+      newChatsRef.current = chats
     } else {
       toast.error(res.message);
     }
@@ -138,7 +139,7 @@ const TextGeneratorPage = () => {
             <HeaderDashboard display="" />
             <PopupMobileMenu />
             <LeftpanelDashboard />
-            <RightpanelDashboard onTopicClick={onTopicClick} topic={currentTopic}/>
+            <RightpanelDashboard ref={historyTopicRef} onTopicClick={onTopicClick} topic={currentTopic}/>
             <Modal onTopicSubmit={onTopicSubmit}/>
 
             <div className="rbt-main-content">

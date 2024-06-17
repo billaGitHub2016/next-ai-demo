@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState,  } from 'react';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import ReactLoading from 'react-loading';
 import RightPanelData from '../../data/dashboard.json';
 import SingleRightPanel from './Props/SingleRightPanel';
 import { useAppContext } from '@/context/Context';
 
-const RightpanelDashboard = (props) => {
+const RightpanelDashboard = forwardRef((props, ref) => {
     const { shouldCollapseRightbar } = useAppContext();
     const [sectionStates, setSectionStates] = useState({
         previous: true,
@@ -15,6 +15,9 @@ const RightpanelDashboard = (props) => {
     });
     const [historyTopics, setHistoryTopics] = useState([]);
     const [loading, setLoading] = useState(false);
+    useImperativeHandle(ref, () => ({
+        getHistoryTopics
+    }));
 
     const toggleSection = section => {
         setSectionStates(prevState => ({
@@ -47,7 +50,12 @@ const RightpanelDashboard = (props) => {
                 setLoading(false);
             });
         if (res.code === '0') {
-            setHistoryTopics(res.data.list);
+            const topicList = res.data.list;
+            topicList.push({
+                id: null,
+                title: '其他'
+            })
+            setHistoryTopics(topicList);
         }
     };
 
@@ -109,6 +117,6 @@ const RightpanelDashboard = (props) => {
             </div>
         </>
     );
-};
+});
 
 export default RightpanelDashboard;

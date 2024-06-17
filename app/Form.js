@@ -226,7 +226,7 @@ const Form = forwardRef((props, ref) => {
   return (  
     <>  
       {/* <Tooltip id="my-tooltip" className="custom-tooltip tooltip-inner" />   */}
-      <form className="new-chat-form border-gradient">  
+      <form className="new-chat-form border-gradient" onSubmit={handleSendMessage}>  
         <textarea  
           rows="1"  
           placeholder="Send a message..."  
