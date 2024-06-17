@@ -41,7 +41,7 @@ export async function GET(request) {
     const flag = requestUrl.searchParams.get('flag');
     const signature = requestUrl.searchParams.get('signature');
 
-    let apiUrl = `http://13.73.239.158:3000/proxyChat?message=${encodeURI(
+    let apiUrl = `http://13.73.239.158:3001/chatProxy?message=${encodeURI(
         message
     )}&user_id=${encodeURI(user_id)}&flag=${encodeURI(flag)}&sign=${encodeURI(signature)}`;
     if (process.env.RUN_ENV !== 'DEV') {

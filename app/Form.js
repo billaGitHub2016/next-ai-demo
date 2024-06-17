@@ -172,7 +172,7 @@ const Form = forwardRef((props, ref) => {
 
                 props.onResponse({
                   id: topicId,
-                  text: formatTagValue
+                  text: removeFormatValue
                 });
                 
                 push();
