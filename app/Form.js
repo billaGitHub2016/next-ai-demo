@@ -165,7 +165,7 @@ const Form = forwardRef((props, ref) => {
                 // Check chunks by logging to the console
                 console.log(done, value);
                 const decodeValue = utf8decoder.decode(value)
-                let removeFormatValue = decodeValue.replace(/data:[^]*?\n\n/gm, '');
+                let removeFormatValue = decodeValue;
                 removeFormatValue = removeFormatValue.replace(/data: /gm, '');
                 removeFormatValue = removeFormatValue.replace(/\n\n/gm, '');
                 chunks += removeFormatValue

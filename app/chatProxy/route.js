@@ -43,7 +43,7 @@ export async function GET(request) {
 
     let apiUrl = `http://13.73.239.158:3001/chatProxy?message=${encodeURI(
         message
-    )}&user_id=${encodeURI(user_id)}&flag=${encodeURI(flag)}&sign=${encodeURI(signature)}`;
+    )}&user_id=${encodeURI(user_id)}&flag=${encodeURI(flag)}&signature=${encodeURI(signature)}`;
     if (process.env.RUN_ENV !== 'DEV') {
         apiUrl = `http://104.46.232.133/api/demo/chat?message=${encodeURIComponent(
             message
@@ -54,7 +54,7 @@ export async function GET(request) {
 
     try {
         // 发起请求到目标URL
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, { cache: 'no-cache' });
 
         if (!response.ok) {
             // 如果响应状态码不是200-299，返回错误
