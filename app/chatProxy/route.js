@@ -48,7 +48,7 @@ export async function GET(request) {
         apiUrl = `http://104.46.232.133/api/demo/chat?message=${encodeURIComponent(
             message
         )}&user_id=${encodeURIComponent(user_id)}&sign=${encodeURIComponent(
-            sign
+            signature
         )}&flag=${encodeURIComponent(flag)}`;
     }
 
