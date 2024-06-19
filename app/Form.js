@@ -267,20 +267,20 @@ const Form = forwardRef((props, ref) => {
           }}
           ref={textInputRef}
         ></textarea>  
-        <div className="left-icons">  
+        {/* <div className="left-icons">  
           <div title="ChatenAI" className="form-icon icon-gpt">  
             <i className="feather-aperture"></i>  
           </div>  
-        </div>  
+        </div>   */}
         <div className="right-icons">  
-          <div  
+          {/* <div  
             className="form-icon icon-plus"  
             data-tooltip-id="my-tooltip"  
             data-tooltip-content="Choose File"  
           >  
             <input type="file" className="input-file" name="myfile" multiple/>  
             <i className="feather-plus-circle"></i>  
-          </div>  
+          </div>   */}
           <a  
             className="form-icon icon-mic"  
             data-tooltip-id="my-tooltip"  
