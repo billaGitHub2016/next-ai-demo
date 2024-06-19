@@ -61,13 +61,12 @@ const PopupMobileMenu = () => {
                     </div>
 
                     <div className='content'>
-                        <Nav />
-                        <div className='rbt-sm-separator'></div>
-                        {user && (
-                            <div className='rbt-default-sidebar-wrapper'>
-                                <SmallNav />
-                            </div>
-                        )}
+                        {/* <Nav />
+                        <div className='rbt-sm-separator'></div> */}
+                        
+                        <div className='rbt-default-sidebar-wrapper'>
+                            <SmallNav />
+                        </div>
                     </div>
                 </div>
             </div>

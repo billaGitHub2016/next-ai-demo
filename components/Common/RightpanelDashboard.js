@@ -7,7 +7,7 @@ import SingleRightPanel from './Props/SingleRightPanel';
 import { useAppContext } from '@/context/Context';
 
 const RightpanelDashboard = forwardRef((props, ref) => {
-    const { shouldCollapseRightbar } = useAppContext();
+    const { shouldCollapseRightbar, user } = useAppContext();
     const [sectionStates, setSectionStates] = useState({
         previous: true,
         yesterday: true,
@@ -27,6 +27,9 @@ const RightpanelDashboard = forwardRef((props, ref) => {
     };
 
     const getHistoryTopics = async () => {
+        if (!user) {
+            return
+        }
         setLoading(true);
         const searchParams = {
             pageNo: 1,

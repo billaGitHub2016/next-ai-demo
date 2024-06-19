@@ -38,7 +38,6 @@ const Nav = () => {
         setUser(null)
         removeUserCache()
       }
-
     } catch(err) {
       toast.error('登出失败');
     }

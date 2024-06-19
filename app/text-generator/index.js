@@ -29,6 +29,13 @@ const TextGeneratorPage = () => {
     }
   }, [newChats])
 
+  useEffect(() => {
+    window.dispatchNewsDetailEvent = dispatchNewsDetailEvent
+    return () => {
+      window.dispatchNewsDetailEvent = null
+    }
+  }, [])
+
   // 开始一个对话
   const onStartChat = (params) => {
     const newChat = {
@@ -50,7 +57,7 @@ const TextGeneratorPage = () => {
         }
       ]
     }
-    const updateChats = [...newChats, newChat]
+    const updateChats = [...newChatsRef.current, newChat]
     setNewchats(updateChats);
     newChatsRef.current = updateChats
   }
@@ -71,12 +78,18 @@ const TextGeneratorPage = () => {
   const onFinishChat = (params) => {
     const match = newChatsRef.current.find(item => item.id === params.id)
     if (match) {
-      setTimeout(() => {
-        match.status = 'finish'
-        match.content[0].img = ''
-        match.content[0].text = ''
-        setNewchats([...newChatsRef.current])
-      }, 2000) // 延时一下再改变状态，优化打字输出效果
+      // setTimeout(() => {
+      //   match.status = 'finish'
+      //   match.content[0].img = ''
+      //   match.content[0].text = ''
+      //   setNewchats([...newChatsRef.current])
+      // }, 2000) // 延时一下再改变状态，优化打字输出效果
+      match.status = 'finish'
+      match.content[0].img = ''
+      match.content[0].text = ''
+      debugger
+      match.content[0].desc = convertNewsLinkToQuestion(match)
+      setNewchats([...newChatsRef.current])
     }
   }
 
@@ -181,6 +194,37 @@ function convertTipicLogToChats(logs, user) {
     }
     return newChat
   })
+}
+
+function convertNewsLinkToQuestion(chat) {
+  let content = chat.content[0].desc
+  if (content) {
+    const regex = /<p>来源: <a[^>]*>(.*?)<\/a><\/p>/g; // 匹配新闻链接， 例子：<a href="https://www.bloomberg.com/news/articles/2024-06-17/us-suspends-mexico-avocado-shipments-due-to-inspector-incident">Bloomberg</a>
+    const matches = content.matchAll(regex);
+
+    for (const match of matches) {
+      // let aTag = match[0]
+      const channel = match[1]
+      const newQuestion = `{${channel}}对{${chat.desc}}具体报道是什么`
+      // aTag = aTag.replace(/href="\S+"/, `href="javascript:void(0)" onClick="dispatchNewsDetailEvent('${newQuestion}')" class="news-detail-link"`);
+      const pTag = `<p>来源: <span onClick="dispatchNewsDetailEvent('${newQuestion}')" class="news-detail-link">${channel}</span></p>`
+      content = content.replace(match[0], pTag);
+    }
+  }
+  return content
+}
+
+function dispatchNewsDetailEvent(question, e) {
+  debugger
+  const event = new CustomEvent('newsDetailEvent', {
+    detail: {
+      question,
+    },
+    bubbles: false, // 事件是否可以冒泡
+    cancelable: true // 事件是否可以取消
+  });
+  // 触发自定义事件
+  document.dispatchEvent(event);
 }
 
 export default TextGeneratorPage;

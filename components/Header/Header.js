@@ -13,8 +13,13 @@ import Nav from "./Nav";
 import GridMenu from "./GridMenu";
 
 const Header = ({ headerTransparent, headerSticky, btnClass }) => {
-  const { activeMobileMenu, setActiveMobileMenu } = useAppContext();
+  const { activeMobileMenu, setActiveMobileMenu, user } = useAppContext();
   const [isSticky, setIsSticky] = useState(false);
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +37,25 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const onSignout = async () => {
+    try {
+      const res = await fetch('/apis/signout', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+      
+      if (res.code === '0') {
+        toast.success(res.message);
+        router.push('/authPage')
+        setUser(null)
+        removeUserCache()
+      }
+    } catch(err) {
+      toast.error('登出失败');
+    }
+  }
   return (
     <>
       <header
@@ -70,8 +94,27 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
                 </div> */}
 
                 {/* <GridMenu ToolsData={ToolsData} /> */}
-
-                <div className="mobile-menu-bar ml--5 d-block d-lg-none">
+                
+                <div className="mobile-menu-bar ml--5 d-lg-none" style={{ display: 'flex', alignItems: 'center'}}>
+                  { 
+                      isClient && user ? (<a href="#" onClick={onSignout} style={{
+                        fontSize: '16px',
+                        fontWeight: 500,
+                        color: 'var(--color-heading)',
+                        marginRight: '15px'
+                      }}>
+                          <i className="feather-log-out"></i>
+                          <span>登出</span>
+                        </a>) : (<Link href="/authPage" style={{
+                          fontSize: '16px',
+                          fontWeight: 500,
+                          color: 'var(--color-heading)',
+                          marginRight: '15px'
+                        }}>
+                          <i className="feather-log-out"></i>
+                          <span>登入</span>
+                        </Link>)
+                  }
                   <div className="hamberger">
                     <button
                       className="hamberger-button"

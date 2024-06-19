@@ -16,3 +16,9 @@
     visibility: visible;
   }
 }
+
+.chat-content .news-detail-link {
+  color: #C231A1;
+  cursor: pointer;
+  /* text-decoration: underline; */
+}

@@ -34,6 +34,7 @@ const TextGenerator = (props) => {
     // } else {
     //   setPrintTextEnd()
     // }
+
   }, [chats]);
 
   return (

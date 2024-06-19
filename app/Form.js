@@ -1,11 +1,29 @@
-import React, { useState, useImperativeHandle, useRef, forwardRef } from "react";  
+import React, { useState, useImperativeHandle, useRef, forwardRef, useEffect, useCallback } from "react";  
 import { Tooltip } from "react-tooltip";  
 import { createSignature } from '@/app/utils/createSignature'
+import { useAppContext } from '@/context/Context';
 
 const Form = forwardRef((props, ref) => {
   const [message, setMessage] = useState("");  
   const [loading, setLoading] = useState(false)
   const textInputRef = useRef()
+  const { user } = useAppContext();
+  const  newsDetailEventHandler = useCallback((e) => {
+    console.log('go to detail = ', e)
+    const question = e?.detail?.question
+    debugger
+    if (question) {
+      regenerateMessage(question)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('newsDetailEvent', newsDetailEventHandler);
+
+    return () => {
+      document.removeEventListener('newsDetailEvent', newsDetailEventHandler);
+    }
+  }, [])
 
   const handleSendMessage = async (e) => {
     if (e) {
@@ -46,7 +64,7 @@ const Form = forwardRef((props, ref) => {
         },  
       });  
       console.log('before the response..')
-      console.log(response)
+      // console.log(response)
 
       const reader = response.body.getReader();
       const utf8decoder = new TextDecoder(); 
@@ -67,9 +85,9 @@ const Form = forwardRef((props, ref) => {
                 // Get the data and send it to the browser via the controller
                 controller.enqueue(value);
                 // Check chunks by logging to the console
-                console.log(done, value);
+                // console.log(done, value);
                 const decodeValue = utf8decoder.decode(value)
-                console.log(decodeValue);
+                // console.log(decodeValue);
                 let removeFormatValue = decodeValue;
                 removeFormatValue = removeFormatValue.replace(/data: /gm, '');
                 removeFormatValue = removeFormatValue.replace(/\n\n/gm, '');
@@ -90,16 +108,18 @@ const Form = forwardRef((props, ref) => {
       console.log('after the response..')       
       console.log('text = ', text)
 
-      fetch('/apis/topicLog', {
-        method: "POST",
-        body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text } }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-store'
-      }).then(res => res.json()).catch(err => {
-        
-      })
+      if (user) {
+        fetch('/apis/topicLog', {
+          method: "POST",
+          body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text } }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-store'
+        }).then(res => res.json()).catch(err => {
+          
+        })
+      }
 
       props.onFinishChat({
         id: topicId
@@ -130,6 +150,7 @@ const Form = forwardRef((props, ref) => {
     setLoading(true)
 
     const topicId = new Date().getTime();
+    debugger
     props.onStartChat({
       id: topicId,
       topic: message.trim()
@@ -194,17 +215,19 @@ const Form = forwardRef((props, ref) => {
           },
         });  
       })
-
-      fetch('/apis/topicLog', {
-        method: "POST",
-        body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text } }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        cache: 'no-store'
-      }).then(res => res.json()).catch(err => {
-        
-      })
+      
+      if (user) {
+        fetch('/apis/topicLog', {
+          method: "POST",
+          body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text } }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-store'
+        }).then(res => res.json()).catch(err => {
+          
+        })
+      }
 
       props.onFinishChat({
         id: topicId
@@ -275,5 +298,5 @@ const Form = forwardRef((props, ref) => {
     </>  
   );  
 });  
-  
+
 export default Form;  
