@@ -237,9 +237,12 @@ const Form = forwardRef((props, ref) => {
       console.error("Error regenerate message:", error);
     } finally {
       setLoading(false)
-      setTimeout(() => {
-        textInputRef.current?.focus()
-      }, 100)
+      if (window.innerWidth > 768) {
+        // 可能是移动端浏览器
+        setTimeout(() => {
+          textInputRef.current?.focus()
+        }, 100)
+      }
     }
   }
 
