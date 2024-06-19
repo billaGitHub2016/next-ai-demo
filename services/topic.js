@@ -35,3 +35,34 @@ export const getTopicByPage = async (searchParams) => {
   }
 }
 
+export const deleteTopicById = async (params) => {
+  try {
+    const result = await db.sequelize.transaction(async (t) => {
+      await db.topicLog.destroy({
+        where: {
+          userId: params.userId,
+          topicId: params.id
+        }
+      })
+
+      await db.topic.destroy({
+        where: {
+          userId: params.userId,
+          id: params.id
+        }
+      })
+  
+      return 0
+    });
+    return result
+    // 如果执行到此行,则表示事务已成功提交,`result`是事务返回的结果
+    // `result` 就是从事务回调中返回的结果(在这种情况下为 0)
+  
+  } catch (error) {
+    // 如果执行到此,则发生错误.
+    // 该事务已由 Sequelize 自动回滚！
+    console.error('删除话题失败:', error)
+    throw new Error(error.message)
+  }
+}
+

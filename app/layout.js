@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
+import { ConfirmProvider } from "material-ui-confirm";
 import 'react-toastify/dist/ReactToastify.css';
 
 import "bootstrap/scss/bootstrap.scss";
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="" suppressHydrationWarning={true}>
-        {children}
+        <ConfirmProvider>
+          {children}
+        </ConfirmProvider>;
         {<ToastContainer
           position="top-center"
           autoClose={5000}

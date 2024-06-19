@@ -42,7 +42,7 @@ const TextGeneratorPage = () => {
       id: params.id,
       // author: "/images/team/team-01.jpg",
       author: user ? user.avatar : "/images/team/team-01.jpg",
-      title: "You",
+      title: "问",
       desc: params.topic,
       status: 'start',
       content: [
@@ -51,7 +51,7 @@ const TextGeneratorPage = () => {
           "text": "Generating answers for you…",
           // "aiImg": "/images/team/avater.png",
           "aiImg": "/images/ai-avater.png",
-          "title": "ChatenAI",
+          "title": "答",
           "badge": "Bot",
           "desc": ''
         }
@@ -87,7 +87,6 @@ const TextGeneratorPage = () => {
       match.status = 'finish'
       match.content[0].img = ''
       match.content[0].text = ''
-      debugger
       match.content[0].desc = convertNewsLinkToQuestion(match)
       setNewchats([...newChatsRef.current])
     }
@@ -95,6 +94,7 @@ const TextGeneratorPage = () => {
 
   const onTopicSubmit = (params) => {
     setNewchats([])
+    newChatsRef.current = []
     setCurrentTopic(params.topic)
     historyTopicRef.current?.getHistoryTopics()
   }
@@ -133,6 +133,9 @@ const TextGeneratorPage = () => {
         toast('当前会话没有纪录'); 
       }
       const chats = convertTipicLogToChats(res.data.list, user)
+      chats.forEach(c => {
+        c.content[0].desc = convertNewsLinkToQuestion(c)
+      })
       setNewchats(chats);
       newChatsRef.current = chats
     } else {
@@ -177,7 +180,7 @@ function convertTipicLogToChats(logs, user) {
     const newChat = {
       id: log.id,
       author: user ? user.avatar : "/images/team/team-01.jpg",
-      title: "You",
+      title: "问",
       desc: log.question,
       status: 'finish',
       content: [
@@ -186,7 +189,7 @@ function convertTipicLogToChats(logs, user) {
           "text": "",
           // "aiImg": "/images/team/avater.png",
           "aiImg": "/images/ai-avater.png",
-          "title": "ChatenAI",
+          "title": "答",
           "badge": "Bot",
           "desc": log.answer
         }
@@ -199,23 +202,46 @@ function convertTipicLogToChats(logs, user) {
 function convertNewsLinkToQuestion(chat) {
   let content = chat.content[0].desc
   if (content) {
-    const regex = /<p>来源: <a[^>]*>(.*?)<\/a><\/p>/g; // 匹配新闻链接， 例子：<a href="https://www.bloomberg.com/news/articles/2024-06-17/us-suspends-mexico-avocado-shipments-due-to-inspector-incident">Bloomberg</a>
-    const matches = content.matchAll(regex);
-
-    for (const match of matches) {
-      // let aTag = match[0]
-      const channel = match[1]
-      const newQuestion = `{${channel}}对{${chat.desc}}具体报道是什么`
-      // aTag = aTag.replace(/href="\S+"/, `href="javascript:void(0)" onClick="dispatchNewsDetailEvent('${newQuestion}')" class="news-detail-link"`);
-      const pTag = `<p>来源: <span onClick="dispatchNewsDetailEvent('${newQuestion}')" class="news-detail-link">${channel}</span></p>`
-      content = content.replace(match[0], pTag);
+    /**例子
+     * <li>
+        <p><strong>菲律宾与日本加强防务合作：</strong>菲律宾众议院议长费迪南德·马丁·罗穆亚尔德斯（Ferdinand Martin Romualdez）和日本议长福士郎·野中（Fukushiro Nukaga）承诺扩大和加强双边关系以及与美国的三边关系。</p>
+        <p>来源: <a href="https://www.msn.com/en-ph/news/other/ph-japan-speakers-to-boost-defense-ties-expand-trilateral-ties-with-us/ar-BB1oqcub">MSN</a></p>
+      </li>
+     */
+    const parser = new DOMParser();
+    // 解析HTML字符串
+    const doc = parser.parseFromString(content, 'text/html');
+    // 通过查询选择器获取解析后的DOM元素
+    const liTags = doc.querySelectorAll('li');
+    if (liTags && liTags.length > 0) {
+      liTags.forEach(li => {
+        const pTags = li.querySelectorAll('p');
+        if (pTags && pTags.length > 0) {
+          let newsTitle = ''
+          const strongTag = pTags[0].querySelector('strong');
+          if (strongTag) {
+            newsTitle = strongTag.textContent;
+          }
+          const matchPtag = Array.from(pTags).find(p => p.textContent.includes('来源:'))
+          if (matchPtag) {
+            const aTag = matchPtag.querySelector('a');
+            if (aTag) {
+              const channel = aTag.textContent;
+              const newQuestion = `${channel}对${newsTitle}具体报道是什么`
+              const pTag = `来源: <span onClick="dispatchNewsDetailEvent('${newQuestion}')" class="news-detail-link">${channel}</span>`
+              matchPtag.innerHTML = pTag;
+            }
+          }
+        }
+      })
+      content = doc.body.innerHTML;
     }
   }
+  
   return content
 }
 
 function dispatchNewsDetailEvent(question, e) {
-  debugger
   const event = new CustomEvent('newsDetailEvent', {
     detail: {
       question,

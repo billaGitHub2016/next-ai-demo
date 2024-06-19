@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { getUserByJwt } from '../../../services/user';
-import { saveTopic, getTopicByPage } from '../../../services/topic';
+import { saveTopic, getTopicByPage, deleteTopicById } from '../../../services/topic';
 
 export async function POST(request) {
     try {
@@ -85,4 +85,42 @@ export async function GET(request) {
             }
         );
     }
+}
+
+export async function DELETE(request) {
+    try {
+        const jwt = cookies().get('jwt')?.value;
+        const user = await getUserByJwt(jwt);
+        const url = new URL(request.url);
+        const id = url.searchParams.get('id')
+        await deleteTopicById({
+            id,
+            userId: user.id
+        })
+    } catch (error) {
+        console.error('删除会话失败', error);
+        return new Response(
+            JSON.stringify({
+                code: '1',
+                message: '删除会话失败:' + error.message,
+            }),
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }
+        );
+    }
+
+    return new Response(
+        JSON.stringify({
+            code: '0',
+            message: '删除会话成功',
+        }),
+        {
+            headers: {
+                'Content-type': 'application/json',
+            },
+        }
+    );
 }

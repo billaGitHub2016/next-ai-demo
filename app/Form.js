@@ -11,7 +11,6 @@ const Form = forwardRef((props, ref) => {
   const  newsDetailEventHandler = useCallback((e) => {
     console.log('go to detail = ', e)
     const question = e?.detail?.question
-    debugger
     if (question) {
       regenerateMessage(question)
     }
@@ -135,9 +134,12 @@ const Form = forwardRef((props, ref) => {
       console.error("Error sending message:", error);
     } finally {
       setLoading(false)
-      setTimeout(() => {
-        textInputRef.current?.focus()
-      }, 100)
+      if (window.innerWidth > 768) {
+        // 可能是移动端浏览器
+        setTimeout(() => {
+          textInputRef.current?.focus()
+        }, 100)
+      }
     }
   };
   
@@ -150,7 +152,6 @@ const Form = forwardRef((props, ref) => {
     setLoading(true)
 
     const topicId = new Date().getTime();
-    debugger
     props.onStartChat({
       id: topicId,
       topic: message.trim()

@@ -92,7 +92,7 @@ const LeftpanelDashboard = () => {
 
                 <nav className="mainmenu-nav">
                   <ul className="dashboard-mainmenu rbt-default-sidebar-list">
-                    <li className="has-submenu">
+                    {/* <li className="has-submenu">
                       <a
                         className="collapse-btn collapsed"
                         data-bs-toggle="collapse"
@@ -107,7 +107,7 @@ const LeftpanelDashboard = () => {
                       <div className="collapse" id="collapseExample">
                         <UserMenuItems parentClass="submenu rbt-default-sidebar-list" />
                       </div>
-                    </li>
+                    </li> */}
                     <li>
                       <Link href="#">
                         <i className="feather-award"></i>
@@ -117,7 +117,7 @@ const LeftpanelDashboard = () => {
                   </ul>
                   <div className="rbt-sm-separator"></div>
                   <ul className="dashboard-mainmenu rbt-default-sidebar-list">
-                    <li>
+                    {/* <li>
                       <Link
                         className={isActive("/release-notes") ? "active" : ""}
                         href="/release-notes"
@@ -125,7 +125,7 @@ const LeftpanelDashboard = () => {
                         <i className="feather-bell"></i>
                         <span>Release notes</span>
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
                       <Link
                         className={isActive("/terms-policy") ? "active" : ""}
@@ -164,16 +164,16 @@ const LeftpanelDashboard = () => {
                   {/* <h6>Rafi Dev</h6> */}
                   <p>{isClient && user?.email}</p>
                 </div>
-                <div className="author-badge">Free</div>
+                {/* <div className="author-badge">Free</div> */}
               </Link>
-              <div className="btn-part">
+              {/* <div className="btn-part">
                 <Link href="/pricing" className="btn-default btn-border">
                   Upgrade To Pro
                 </Link>
-              </div>
+              </div> */}
             </div>
           </div>
-          <p className="subscription-copyright copyright-text text-center b4  small-text">
+          {/* <p className="subscription-copyright copyright-text text-center b4  small-text">
             © 2024
             <Link
               className="ps-2"
@@ -182,7 +182,7 @@ const LeftpanelDashboard = () => {
               Rainbow Themes
             </Link>
             .
-          </p>
+          </p> */}
         </div>
       </div>
     </>

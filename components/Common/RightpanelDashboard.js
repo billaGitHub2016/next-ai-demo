@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
 import RightPanelData from '../../data/dashboard.json';
 import SingleRightPanel from './Props/SingleRightPanel';
 import { useAppContext } from '@/context/Context';
@@ -62,6 +63,29 @@ const RightpanelDashboard = forwardRef((props, ref) => {
         }
     };
 
+    const onDeleteTopic =  (id) => {
+        deleteTopic(id);
+    }
+
+    const deleteTopic = async (id) => {
+        await fetch(`/apis/topic?id=${id}`, {
+            method: "DELETE",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            cache: 'no-store'
+          }).then(res => res.json()).then((res) => {
+            if (res.code === '1') {
+                toast.error(res.message)
+            } else {
+                toast.success('会话删除成功')
+                getHistoryTopics();
+            }
+          }).catch(err => {
+            toast.error(err.message)
+          })
+    }
+
     useEffect(() => {
         getHistoryTopics();
     }, []);
@@ -108,6 +132,7 @@ const RightpanelDashboard = forwardRef((props, ref) => {
                                     <SingleRightPanel
                                         topic={props.topic}
                                         onTopicClick={props.onTopicClick}
+                                        onDeleteTopic={onDeleteTopic}
                                         {...data}
                                         key={data.id}
                                         RightPanelData={data}

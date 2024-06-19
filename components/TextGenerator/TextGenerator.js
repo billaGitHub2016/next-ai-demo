@@ -104,20 +104,20 @@ const ChatBox = (props) => {
             </div>
             <div className="chat-section">
               <div className="author">
-                <Image
+                {/* <Image
                   className="w-100"
                   src={innerData.aiImg}
                   width={40}
                   height={40}
                   alt="ChatenAI"
-                />
+                /> */}
+                 <span className="rainbow-badge-card">
+                  H.S.
+                </span>
               </div>
               <div className="chat-content">
                 <h6 className="title">
                   {innerData.title}
-                  <span className="rainbow-badge-card">
-                    {innerData?.badge}
-                  </span>
                 </h6>
                 {innerData.desc2 ? (
                   <p className="">{innerData.desc2}</p>

@@ -313,17 +313,28 @@ div {
 }
 
 .rainbow-badge-card {
+    @media #{$sm-layout} {
+        height: 50px;
+        width: 50px;
+        line-height: 50px;
+        font-size: 12px;
+        letter-spacing: 0;
+    }
+    height: 48px;
+    width: 48px;
+    line-height: 48px;
     background-color: transparent;
-    background: linear-gradient(94deg, #dd00ac 10.66%, #7130c3 53.03%, #410093 96.34%, rgba(255, 0, 238, 0.26) 191.41%, rgba(255, 59, 212, 0) 191.43%);
+    background: linear-gradient(57deg, #dd00ac 10.66%, #7130c3 53.03%, #410093 96.34%, rgba(255, 0, 238, 0.26) 191.41%, rgba(255, 59, 212, 0) 191.43%);
     padding: 1px 10px;
-    border-radius: 100px;
+    border-radius: 50%;
     color: #fff;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     display: inline-block;
     position: relative;
     z-index: 2;
     letter-spacing: 0.5px;
+    text-align: center;
 
     &.badge-border {
         border: 2px solid var(--color-border);
@@ -339,6 +350,8 @@ div {
         top: 10px;
     }
 }
+
+
 
 .btn-collaborate-play {
 
