@@ -1,11 +1,15 @@
+import React, { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAppContext } from '@/context/Context';
 
 import SmallNavItem from "../../data/header.json";
 
 const SmallNav = () => {
   const router = useRouter();
+  const { user } = useAppContext();
+  const [isClient, setIsClient] = useState(true)
 
   const isActive = (href) => router.pathname === href;
   return (
@@ -26,7 +30,7 @@ const SmallNav = () => {
           </li>
         </ul> */}
         {/* <div className="rbt-sm-separator"></div> */}
-        <ul className="dashboard-mainmenu rbt-default-sidebar-list">
+        { (<ul className="dashboard-mainmenu rbt-default-sidebar-list">
           {SmallNavItem &&
             SmallNavItem.smallNavItem.slice(0, 7).map((data, index) => (
               <li key={index}>
@@ -59,7 +63,8 @@ const SmallNav = () => {
                 </Link>
               </li>
             ))}
-        </ul>
+        </ul>)
+        }
         <div className="rbt-sm-separator"></div>
         <div className="mainmenu-nav">
           <ul className="dashboard-mainmenu rbt-default-sidebar-list">

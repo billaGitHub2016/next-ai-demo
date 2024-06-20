@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from 'react-toastify';
 
 import { useAppContext } from "@/context/Context";
 
@@ -12,8 +13,10 @@ import ToolsData from "../../data/header.json";
 import Nav from "./Nav";
 import GridMenu from "./GridMenu";
 
+import { removeUserCache } from '../../utils/auth'
+
 const Header = ({ headerTransparent, headerSticky, btnClass }) => {
-  const { activeMobileMenu, setActiveMobileMenu, user } = useAppContext();
+  const { activeMobileMenu, setActiveMobileMenu, user, setUser } = useAppContext();
   const [isSticky, setIsSticky] = useState(false);
   const [isClient, setIsClient] = useState(false)
  
@@ -48,7 +51,6 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
       
       if (res.code === '0') {
         toast.success(res.message);
-        router.push('/authPage')
         setUser(null)
         removeUserCache()
       }

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import ReactLoading from 'react-loading';
+import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import RightPanelData from '../../data/dashboard.json';
 import SingleRightPanel from './Props/SingleRightPanel';
@@ -16,6 +17,8 @@ const RightpanelDashboard = forwardRef((props, ref) => {
     });
     const [historyTopics, setHistoryTopics] = useState([]);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
     useImperativeHandle(ref, () => ({
         getHistoryTopics
     }));
@@ -60,6 +63,11 @@ const RightpanelDashboard = forwardRef((props, ref) => {
                 title: '其他'
             })
             setHistoryTopics(topicList);
+        } else {
+            toast.error(res.message);
+            if (res.code === '401') {
+                router.push('authPage')
+            }
         }
     };
 
@@ -88,7 +96,7 @@ const RightpanelDashboard = forwardRef((props, ref) => {
 
     useEffect(() => {
         getHistoryTopics();
-    }, []);
+    }, [user]);
 
     return (
         <>

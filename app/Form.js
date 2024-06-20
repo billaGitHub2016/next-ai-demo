@@ -176,7 +176,7 @@ const Form = forwardRef((props, ref) => {
         },  
       });  
       console.log('before the response..')
-      console.log(response)
+      // console.log(response)
 
       const reader = response.body.getReader();
       const utf8decoder = new TextDecoder(); 
@@ -197,7 +197,7 @@ const Form = forwardRef((props, ref) => {
                 // Get the data and send it to the browser via the controller
                 controller.enqueue(value);
                 // Check chunks by logging to the console
-                console.log(done, value);
+                // console.log(done, value);
                 const decodeValue = utf8decoder.decode(value)
                 let removeFormatValue = decodeValue;
                 removeFormatValue = removeFormatValue.replace(/data: /gm, '');

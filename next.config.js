@@ -20,5 +20,8 @@ module.exports = {
         ],  
       },  
     ];  
-  },  
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['sequelize', 'sequelize-typescript'],
+  }
 };  

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { setUserCache, getUserCache } from '../utils/auth'
+import { setUserCache, getUserCache, removeUserCache } from '../utils/auth'
 
 export const CreateContext = createContext();
 
@@ -36,9 +36,13 @@ const Context = ({ children }) => {
       if (res.code === '0') {
         setUser(res.data.user)
         setUserCache(res.data.user)
+      } else {
+        setUser(null)
+        removeUserCache()
       }
     } catch (error) {
-      
+      setUser(null)
+      removeUserCache()
     }
   }
 
