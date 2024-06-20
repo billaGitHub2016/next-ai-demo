@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       <body className="" suppressHydrationWarning={true}>
         <ConfirmProvider>
           {children}
-        </ConfirmProvider>;
+        </ConfirmProvider>
         {<ToastContainer
           position="top-center"
           autoClose={5000}

@@ -99,7 +99,7 @@ const Header = ({ headerTransparent, headerSticky, btnClass }) => {
                 
                 <div className="mobile-menu-bar ml--5 d-lg-none" style={{ display: 'flex', alignItems: 'center'}}>
                   { 
-                      isClient && user ? (<a href="#" onClick={onSignout} style={{
+                      isClient && user ? (<a href="javascript:void(0);" onClick={onSignout} style={{
                         fontSize: '16px',
                         fontWeight: 500,
                         color: 'var(--color-heading)',

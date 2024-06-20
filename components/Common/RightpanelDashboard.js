@@ -31,9 +31,9 @@ const RightpanelDashboard = forwardRef((props, ref) => {
     };
 
     const getHistoryTopics = async () => {
-        if (!user) {
-            return
-        }
+        // if (!user) {
+        //     return
+        // }
         setLoading(true);
         const searchParams = {
             pageNo: 1,

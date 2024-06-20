@@ -39,7 +39,7 @@ const Copyright = () => {
         </div>
       </div>
     </>
-  );
+  )
 };
 
 export default Copyright;
