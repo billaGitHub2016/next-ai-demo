@@ -256,7 +256,7 @@ const Form = forwardRef((props, ref) => {
       <form className="new-chat-form border-gradient" onSubmit={handleSendMessage}>  
         <textarea  
           rows="1"  
-          placeholder="Send a message..."  
+          placeholder="提交问题"  
           value={message}  
           onChange={(e) => setMessage(e.target.value)}
           disabled={loading}

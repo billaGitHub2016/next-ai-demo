@@ -114,7 +114,7 @@ const RightpanelDashboard = forwardRef((props, ref) => {
                         <span className='icon'>
                             <i className='feather-plus-circle'></i>
                         </span>
-                        <span>New Chat</span>
+                        <span>新会话</span>
                     </a>
                 </div>
                 <div className='right-side-bottom'>

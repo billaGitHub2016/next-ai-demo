@@ -61,7 +61,7 @@ const Reaction = (props) => {
           <div className="right-side-btn">
             <button className="react-btn btn-default btn-small btn-border" onClick={props.onRegenerate}>
               <i className="feather-repeat"></i>
-              <span>Regenerate</span>
+              <span>重答</span>
             </button>
           </div>
         </div>

@@ -48,7 +48,7 @@ const TextGeneratorPage = () => {
       content: [
         {
           "img": "/images/icons/loader-one.gif",
-          "text": "Generating answers for you…",
+          "text": "资料采集分析…",
           // "aiImg": "/images/team/avater.png",
           "aiImg": "/images/ai-avater.png",
           "title": "答",
