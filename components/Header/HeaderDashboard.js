@@ -4,6 +4,7 @@ import { useAppContext } from "@/context/Context";
 
 import logo from "../../public/images/logo/logo.png";
 import logoDark from "../../public/images/logo/logo-dark.png";
+import logoNew from '../../public/images/logo_new.png'
 import avatar from "../../public/images/team/team-01.jpg";
 
 import Nav from "./Nav";
@@ -42,14 +43,14 @@ const HeaderDashboard = ({ display }) => {
                   <Link href="/">
                     <Image
                       className="logo-light"
-                      src={logo}
+                      src={logoNew}
                       width={201}
                       height={35}
                       alt="Corporate Logo"
                     />
                     <Image
                       className="logo-dark"
-                      src={logoDark}
+                      src={logoNew}
                       width={201}
                       height={35}
                       alt="Corporate Logo"
