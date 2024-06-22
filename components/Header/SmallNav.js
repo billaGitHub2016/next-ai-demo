@@ -69,7 +69,7 @@ const SmallNav = () => {
             ))}
         </ul>)
         }
-        <div className="rbt-sm-separator"></div>
+        {/* <div className="rbt-sm-separator"></div> */}
         <div className="mainmenu-nav">
           <ul className="dashboard-mainmenu rbt-default-sidebar-list">
             {/* <li className="has-submenu">
@@ -108,7 +108,7 @@ const SmallNav = () => {
             </li> */}
           </ul>
 
-          <div className="rbt-sm-separator"></div>
+          {/* <div className="rbt-sm-separator"></div> */}
           {/* <ul className="dashboard-mainmenu rbt-default-sidebar-list">
             <li>
               <Link href="/release-notes">

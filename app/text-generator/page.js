@@ -1,8 +1,8 @@
 import TextGeneratorPage from "./index";
 
 export const metadata = {
-  title: "Text Generator - AI SaaS Website NEXTJS14 UI Kit",
-  description: "ChatenAI - AI SaaS Website NEXTJS14 UI Kit",
+  title: "H.S. 智汇",
+  description: "H.S. 智汇 ChatenAI",
 };
 
 const TextGeneratorLayout = () => {
