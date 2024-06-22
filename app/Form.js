@@ -281,13 +281,13 @@ const Form = forwardRef((props, ref) => {
             <input type="file" className="input-file" name="myfile" multiple/>  
             <i className="feather-plus-circle"></i>  
           </div>   */}
-          <a  
+          {/* <a  
             className="form-icon icon-mic"  
             data-tooltip-id="my-tooltip"  
             data-tooltip-content="Voice Search"  
           >  
             <i className="feather-mic"></i>  
-          </a>  
+          </a>   */}
           <button  
             type="submit"  
             className="form-icon icon-send"  

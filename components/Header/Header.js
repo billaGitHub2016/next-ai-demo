@@ -7,7 +7,8 @@ import { toast } from 'react-toastify';
 
 import { useAppContext } from "@/context/Context";
 
-import logo from "../../public/images/logo/logo.png";
+// import logo from "../../public/images/logo/logo.png";
+import logo from "../../public/images/logo_new.png";
 import ToolsData from "../../data/header.json";
 
 import Nav from "./Nav";

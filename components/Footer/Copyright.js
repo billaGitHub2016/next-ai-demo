@@ -8,8 +8,8 @@ const Copyright = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-6 col-md-8 col-sm-12 col-12">
-              <div className="copyright-left">
-                <ul className="ft-menu link-hover">
+              <div className="copyright-left" style={{display: 'flex;', justifyContent: 'center'}}>
+                {/* <ul className="ft-menu link-hover">
                   <li>
                     <Link href="/privacy-policy">Privacy Policy</Link>
                   </li>
@@ -19,7 +19,8 @@ const Copyright = () => {
                   <li>
                     <Link href="/contact">Contact Us</Link>
                   </li>
-                </ul>
+                </ul> */}
+                <span>H.S.@2023-2024</span>
               </div>
             </div>
             <div className="col-lg-6 col-md-4 col-sm-12 col-12">
