@@ -14,7 +14,8 @@ const StaticbarDashboard = forwardRef((props, ref) => {
         <Form {...props} ref={messageForm}/>
 
         <p className="b3 small-text">
-          ChatenAi can make mistakes. Consider checking important information.
+          {/* ChatenAi can make mistakes. Consider checking important information. */}
+          H.S.@2023-2024
         </p>
       </div>
     </>

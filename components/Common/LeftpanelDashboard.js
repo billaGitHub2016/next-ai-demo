@@ -91,7 +91,7 @@ const LeftpanelDashboard = () => {
                 <div className="rbt-sm-separator"></div>
 
                 <nav className="mainmenu-nav">
-                  <ul className="dashboard-mainmenu rbt-default-sidebar-list">
+                  {/* <ul className="dashboard-mainmenu rbt-default-sidebar-list"> */}
                     {/* <li className="has-submenu">
                       <a
                         className="collapse-btn collapsed"
@@ -108,16 +108,16 @@ const LeftpanelDashboard = () => {
                         <UserMenuItems parentClass="submenu rbt-default-sidebar-list" />
                       </div>
                     </li> */}
-                    <li>
+                    {/* <li>
                       <Link href="#">
                         <i className="feather-award"></i>
                         <span>Help & FAQ</span>
                       </Link>
-                    </li>
-                  </ul>
+                    </li> */}
+                  {/* </ul> */}
                   <div className="rbt-sm-separator"></div>
-                  <ul className="dashboard-mainmenu rbt-default-sidebar-list">
-                    {/* <li>
+                  {/* <ul className="dashboard-mainmenu rbt-default-sidebar-list">
+                    <li>
                       <Link
                         className={isActive("/release-notes") ? "active" : ""}
                         href="/release-notes"
@@ -125,7 +125,7 @@ const LeftpanelDashboard = () => {
                         <i className="feather-bell"></i>
                         <span>Release notes</span>
                       </Link>
-                    </li> */}
+                    </li>
                     <li>
                       <Link
                         className={isActive("/terms-policy") ? "active" : ""}
@@ -135,7 +135,7 @@ const LeftpanelDashboard = () => {
                         <span>Terms & Policy</span>
                       </Link>
                     </li>
-                  </ul>
+                  </ul> */}
                 </nav>
               </div>
             </div>

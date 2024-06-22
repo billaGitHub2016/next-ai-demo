@@ -100,29 +100,29 @@ const SmallNav = () => {
                 </ul>
               </div>
             </li> */}
-            <li>
+            {/* <li>
               <a href="#">
                 <i className="feather-award"></i>
                 <span>Help & FAQ</span>
               </a>
-            </li>
+            </li> */}
           </ul>
 
           <div className="rbt-sm-separator"></div>
-          <ul className="dashboard-mainmenu rbt-default-sidebar-list">
-            {/* <li>
+          {/* <ul className="dashboard-mainmenu rbt-default-sidebar-list">
+            <li>
               <Link href="/release-notes">
                 <i className="feather-bell"></i>
                 <span>Release notes</span>
               </Link>
-            </li> */}
+            </li>
             <li>
               <Link href="/terms-policy">
                 <i className="feather-briefcase"></i>
                 <span>Terms & Policy</span>
               </Link>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </nav>
     </>
