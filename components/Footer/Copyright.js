@@ -7,7 +7,7 @@ const Copyright = () => {
       <div className="copyright-area copyright-style-one">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-6 col-md-8 col-sm-12 col-12">
+            <div className="col-lg-12 col-md-12 col-sm-12 col-12">
               <div className="copyright-left" style={{display: 'flex', justifyContent: 'center'}}>
                 {/* <ul className="ft-menu link-hover">
                   <li>
@@ -23,8 +23,8 @@ const Copyright = () => {
                 <span>H.S.@2023-2024</span>
               </div>
             </div>
-            <div className="col-lg-6 col-md-4 col-sm-12 col-12">
-              {/* <div className="copyright-right text-center text-lg-end">
+            {/* <div className="col-lg-6 col-md-4 col-sm-12 col-12">
+              <div className="copyright-right text-center text-lg-end">
                 <p className="copyright-text">
                   Copyright © 2024
                   <Link
@@ -34,8 +34,8 @@ const Copyright = () => {
                     <span>Rainbow-Themes.</span>
                   </Link>
                 </p>
-              </div> */}
-            </div>
+              </div>
+            </div> */}
           </div>
         </div>
       </div>
