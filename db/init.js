@@ -12,7 +12,7 @@ const initialize = async () => {
     const port = process.env.DB_PORT;
     const user = process.env.DB_USER;
     const password = process.env.DB_PASSWORD;
-    const database = process.env.DB_NAME;
+const database = process.env.DB_NAME;
     console.log(host, port, user, password, database);
     const connection = await mysql.createConnection({
         host: process.env.DB_HOST,
@@ -46,7 +46,7 @@ const initialize = async () => {
     });
 
     // sync all models with database
-    await db.sequelize.sync();
+    await db.sequelize.sync({ alter: true });
 
     await createSeedUser(db);
 

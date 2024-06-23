@@ -21,6 +21,9 @@ function topicLog(sequelize) {
     topicId: {
       type: DataTypes.INTEGER,
     },
+    orignalQuestion: {
+      type: DataTypes.TEXT,
+    }
   }, {
     sequelize, // 要连接的数据库实例
     indexes: [{ fields: ['createdAt'] }, { fields: ['userId'] }, { fields: ['topicId'] }],

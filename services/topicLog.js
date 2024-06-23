@@ -1,14 +1,12 @@
 import { db } from '../db'
 
 export const saveTopicLog = async (user, topic, log) => {
-    console.log('user', user)
-    console.log('topic', topic)
-    console.log('log', log)
     const newLog = await db.topicLog.create({
       userId: user.id,
       topicId: topic?.id,
       question: log.question,
       answer: log.answer,
+      orignalQuestion: log.orignalQuestion
     })
     return newLog
 }

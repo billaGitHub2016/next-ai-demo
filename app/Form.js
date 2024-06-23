@@ -11,8 +11,9 @@ const Form = forwardRef((props, ref) => {
   const  newsDetailEventHandler = useCallback((e) => {
     console.log('go to detail = ', e)
     const question = e?.detail?.question
+    const orignalQuestion = e?.detail?.orignalQuestion
     if (question) {
-      regenerateMessage(question)
+      regenerateMessage(question, orignalQuestion)
     }
   }, [])
 
@@ -41,7 +42,8 @@ const Form = forwardRef((props, ref) => {
     const topicId = new Date().getTime();
     props.onStartChat({
       id: topicId,
-      topic: messgeCopy
+      topic: messgeCopy,
+      orignalQuestion: messgeCopy
     })
   
     try {  
@@ -110,7 +112,7 @@ const Form = forwardRef((props, ref) => {
       if (user) {
         fetch('/apis/topicLog', {
           method: "POST",
-          body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text } }),
+          body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text, orignalQuestion: message.trim() } }), // 增加orignalQuestion，只有在最初提问时会有这个原始问题的字段，用于生成再次提问的问题
           headers: {
             'Content-Type': 'application/json',
           },
@@ -143,7 +145,7 @@ const Form = forwardRef((props, ref) => {
     }
   };
   
-  const regenerateMessage = async (message) => {
+  const regenerateMessage = async (message, orignalQuestion) => {
     if (!message.trim()) {  
       alert("Please enter a message.");  
       return;  
@@ -154,7 +156,8 @@ const Form = forwardRef((props, ref) => {
     const topicId = new Date().getTime();
     props.onStartChat({
       id: topicId,
-      topic: message.trim()
+      topic: message.trim(),
+      orignalQuestion
     })
   
     try {  
@@ -220,7 +223,7 @@ const Form = forwardRef((props, ref) => {
       if (user) {
         fetch('/apis/topicLog', {
           method: "POST",
-          body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text } }),
+          body: JSON.stringify({ topic: props.topic, topicLog: { question: message.trim(), answer: text, orignalQuestion } }),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -229,7 +232,7 @@ const Form = forwardRef((props, ref) => {
           
         })
       }
-
+      debugger
       props.onFinishChat({
         id: topicId
       }) 

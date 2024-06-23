@@ -44,6 +44,7 @@ const TextGeneratorPage = () => {
       author: user ? user.avatar : "/images/team/team-01.jpg",
       title: "问",
       desc: params.topic,
+      orignalQuestion: params.orignalQuestion,
       status: 'start',
       content: [
         {
@@ -100,7 +101,7 @@ const TextGeneratorPage = () => {
   }
 
   const onRegenerate = (log) => {
-    messageFormRef.current?.messageForm.current?.regenerateMessage(log.desc)
+    messageFormRef.current?.messageForm.current?.regenerateMessage(log.desc, log.orignalQuestion)
   }
 
   const getHistoryTopicLogs = async (id) => {
@@ -182,6 +183,7 @@ function convertTipicLogToChats(logs, user) {
       author: user ? user.avatar : "/images/team/team-01.jpg",
       title: "问",
       desc: log.question,
+      orignalQuestion: log.orignalQuestion,
       status: 'finish',
       content: [
         {
@@ -218,18 +220,22 @@ function convertNewsLinkToQuestion(chat) {
         const pTags = li.querySelectorAll('p');
         if (pTags && pTags.length > 0) {
           let newsTitle = ''
-          const strongTag = pTags[0].querySelector('strong');
-          if (strongTag) {
-            newsTitle = strongTag.textContent;
+          if (chat.orignalQuestion) {
+            newsTitle = chat.orignalQuestion
+          } else {
+            const strongTag = pTags[0].querySelector('strong');
+            if (strongTag) {
+              newsTitle = strongTag.textContent;
+            }
           }
-          const matchPtag = Array.from(pTags).find(p => p.textContent.includes('来源:'))
+          const matchPtag = Array.from(pTags).find(p => p.innerHTML.includes('(<a href='))
           if (matchPtag) {
             const aTag = matchPtag.querySelector('a');
             if (aTag) {
               const channel = aTag.textContent;
               const newQuestion = `${channel}对${newsTitle}具体报道是什么`
-              const pTag = `来源: <span onClick="dispatchNewsDetailEvent('${newQuestion}')" class="news-detail-link">${channel}</span>`
-              matchPtag.innerHTML = pTag;
+              const pTag = `<span onClick="dispatchNewsDetailEvent('${newQuestion}', '${chat.orignalQuestion}')" class="news-detail-link">${channel}</span>`
+              matchPtag.innerHTML = matchPtag.innerHTML.replace(aTag.outerHTML, pTag);
             }
           }
         }
@@ -241,10 +247,11 @@ function convertNewsLinkToQuestion(chat) {
   return content
 }
 
-function dispatchNewsDetailEvent(question, e) {
+function dispatchNewsDetailEvent(question, orignalQuestion, e) {
   const event = new CustomEvent('newsDetailEvent', {
     detail: {
       question,
+      orignalQuestion
     },
     bubbles: false, // 事件是否可以冒泡
     cancelable: true // 事件是否可以取消
