@@ -22,8 +22,10 @@
     "http-proxy-middleware": "^3.0.0",
     "jsonwebtoken": "^9.0.2",
     "material-ui-confirm": "^3.0.16",
+    "md5": "^2.3.0",
     "mysql2": "^3.10.1",
     "next": "14.2.3",
+    "next-auth": "^5.0.0-beta.19",
     "pg-hstore": "^2.3.4",
     "prismjs": "^1.29.0",
     "react": "^18",
@@ -38,7 +40,8 @@
     "sass": "^1.69.7",
     "sequelize": "^6.37.3",
     "slick-carousel": "^1.8.1",
-    "venobox": "^2.1.4"
+    "venobox": "^2.1.4",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"
