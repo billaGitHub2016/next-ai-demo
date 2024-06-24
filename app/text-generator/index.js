@@ -213,19 +213,27 @@ function convertNewsLinkToQuestion(chat) {
     const parser = new DOMParser();
     // 解析HTML字符串
     const doc = parser.parseFromString(content, 'text/html');
+    const h4Tag = doc.querySelector('h4');
+    let newsTitle = ''
+    debugger
+    if (h4Tag) {
+      newsTitle = h4Tag.textContent // 优先取答案返回的标题
+    }
     // 通过查询选择器获取解析后的DOM元素
     const liTags = doc.querySelectorAll('li');
     if (liTags && liTags.length > 0) {
       liTags.forEach(li => {
         const pTags = li.querySelectorAll('p');
         if (pTags && pTags.length > 0) {
-          let newsTitle = ''
-          if (chat.orignalQuestion) {
-            newsTitle = chat.orignalQuestion
-          } else {
-            const strongTag = pTags[0].querySelector('strong');
-            if (strongTag) {
-              newsTitle = strongTag.textContent;
+          if (!newsTitle) {
+            // 没有标题，则取下面的问题
+            if (chat.orignalQuestion) {
+              newsTitle = chat.orignalQuestion
+            } else {
+              const strongTag = pTags[0].querySelector('strong');
+              if (strongTag) {
+                newsTitle = strongTag.textContent;
+              }
             }
           }
           let matchPtag = Array.from(pTags).find(p => p.innerHTML.includes('(<a href='))

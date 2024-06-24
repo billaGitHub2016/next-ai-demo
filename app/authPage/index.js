@@ -23,7 +23,7 @@ const AuthPage = () => {
 
           <UserAuth />
 
-          <Footer />
+          {/* <Footer /> */}
           <Copyright />
         </Context>
       </main>

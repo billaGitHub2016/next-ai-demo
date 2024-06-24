@@ -55,7 +55,7 @@ const LeftpanelDashboard = () => {
                       </Link>
                     </li>
                   </ul> */}
-                  <div className="rbt-sm-separator"></div>
+                  {/* <div className="rbt-sm-separator"></div> */}
                   <ul className="dashboard-mainmenu rbt-default-sidebar-list">
                     {HeaderData &&
                       HeaderData.leftPanel.slice(0, 7).map((data, index) => (
@@ -115,7 +115,7 @@ const LeftpanelDashboard = () => {
                       </Link>
                     </li> */}
                   {/* </ul> */}
-                  <div className="rbt-sm-separator"></div>
+                  {/* <div className="rbt-sm-separator"></div> */}
                   {/* <ul className="dashboard-mainmenu rbt-default-sidebar-list">
                     <li>
                       <Link
@@ -141,7 +141,7 @@ const LeftpanelDashboard = () => {
             </div>
           </div>
 
-          <div className="subscription-box">
+          {/* <div className="subscription-box">
             <div className="inner">
               <Link href="/profile-details" className="autor-info">
                 <div className="author-img active">
@@ -152,27 +152,27 @@ const LeftpanelDashboard = () => {
                     src={avatar}
                     alt="Author"
                   />}
-                  {/* <Image
+                  <Image
                     className="w-100"
                     width={40}
                     height={40}
                     src={avatar}
                     alt="Author"
-                  /> */}
+                  />
                 </div>
                 <div className="author-desc">
-                  {/* <h6>Rafi Dev</h6> */}
+                  <h6>Rafi Dev</h6>
                   <p>{isClient && user?.email}</p>
                 </div>
-                {/* <div className="author-badge">Free</div> */}
+                <div className="author-badge">Free</div>
               </Link>
-              {/* <div className="btn-part">
+              <div className="btn-part">
                 <Link href="/pricing" className="btn-default btn-border">
                   Upgrade To Pro
                 </Link>
-              </div> */}
+              </div>
             </div>
-          </div>
+          </div> */}
           {/* <p className="subscription-copyright copyright-text text-center b4  small-text">
             © 2024
             <Link
