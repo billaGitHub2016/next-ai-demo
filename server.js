@@ -1,7 +1,7 @@
 const express = require('express');  
 const next = require('next');  
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const { initialize } = require('./db/init');
+// const { initialize } = require('./db/init');
   
 const dev = process.env.NODE_ENV !== 'production';  
 const app = next({ dev });  
@@ -29,5 +29,5 @@ app.prepare().then(() => {
   });
 
   // 连接数据库
-  initialize()
+  // initialize()
 });  

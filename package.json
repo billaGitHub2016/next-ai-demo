@@ -6,7 +6,11 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "next start -p 3001",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "migrate:up_prod": "NODE_ENV=production npx sequelize-cli db:migrate",
+    "migrate:undo_prod": "NODE_ENV=production npx sequelize-cli db:migrate:undo"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -35,5 +39,8 @@
     "sequelize": "^6.37.3",
     "slick-carousel": "^1.8.1",
     "venobox": "^2.1.4"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.2"
   }
 }

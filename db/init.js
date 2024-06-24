@@ -46,7 +46,7 @@ const database = process.env.DB_NAME;
     });
 
     // sync all models with database
-    await db.sequelize.sync({ alter: true });
+    await db.sequelize.sync();
 
     await createSeedUser(db);
 
