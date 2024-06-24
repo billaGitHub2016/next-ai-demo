@@ -228,7 +228,10 @@ function convertNewsLinkToQuestion(chat) {
               newsTitle = strongTag.textContent;
             }
           }
-          const matchPtag = Array.from(pTags).find(p => p.innerHTML.includes('(<a href='))
+          let matchPtag = Array.from(pTags).find(p => p.innerHTML.includes('(<a href='))
+          if (!matchPtag) {
+            matchPtag = Array.from(pTags).find(p => p.textContent.includes('来源:'))
+          }
           if (matchPtag) {
             const aTag = matchPtag.querySelector('a');
             if (aTag) {
