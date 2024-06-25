@@ -48,6 +48,7 @@ const UserAuth = () => {
       if (res.code === '0') {
         toast.success(res.message)
         setUser(res.data.user)
+        debugger
         if (searchParams.get('to')) {
           router.push(searchParams.get('to'))
         } else {

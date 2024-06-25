@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { getUserByJwt } from '../../../services/user';
+import { getUserByJwt, validateJwt } from '../../../services/user_lead';
 import { saveTopicLog, getTopicLogByPage } from '../../../services/topicLog';
 
 export async function POST(request) {
@@ -42,8 +42,24 @@ export async function POST(request) {
 }
 
 export async function GET(request) {
+    const jwt = cookies().get('jwt')?.value;
     try {
-        const jwt = cookies().get('jwt')?.value;
+        await validateJwt(jwt)
+    } catch (err) {
+        return new Response(
+            JSON.stringify({
+                code: '1',
+                message: err.message,
+            }),
+            {
+                status: 401,
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }
+        );
+    }
+    try {
         const user = await getUserByJwt(jwt);
         const url = new URL(request.url);
         const pageNo1 = url.searchParams.get('pageNo')

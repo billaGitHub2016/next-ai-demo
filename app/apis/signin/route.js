@@ -1,11 +1,11 @@
 import { cookies } from 'next/headers';
-import { userSignin, getUserByJwt } from '../../../services/user';
+import { userSignin, EXPIRE_DATE, getUserByJwt, validateJwt } from '../../../services/user_lead';
 
 export async function POST(request) {
     // const requestUrl = new URL(request.url)
     const body = await request.json();
     const result = await userSignin({ email: body.email, password: body.password });
-    const maxAge = 604800; // 有效期7天
+    const maxAge = EXPIRE_DATE / 1000; // 有效期7天
 
     if (result) {
         return new Response(
@@ -45,10 +45,25 @@ export async function GET(request) {
     // const requestUrl = new URL(request.url)
     let msg = ''
     const jwt = cookies().get('jwt')?.value;
-    console.log('jwt = ', jwt);
+    // console.log('jwt = ', jwt);
     if (jwt) {
+        try {
+            await validateJwt(jwt)
+        } catch (err) {
+            return new Response(
+                JSON.stringify({
+                    code: '1',
+                    message: err.message,
+                }),
+                {
+                    status: 401,
+                    headers: {
+                        'Content-type': 'application/json',
+                    },
+                }
+            );
+        }
         const user = await getUserByJwt(jwt).catch(error => {});
-        console.log('jwt user = ', user);
         if (user) {
           return new Response(
               JSON.stringify({

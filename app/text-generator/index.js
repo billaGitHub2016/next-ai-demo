@@ -1,5 +1,9 @@
 "use client";
 
+import { useCallback, useState, useRef, useEffect } from "react";
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
+import ReactLoading from "react-loading";
 import Context from "@/context/Context";
 import HeaderDashboard from "@/components/Header/HeaderDashboard";
 import PopupMobileMenu from "@/components/Header/PopupMobileMenu";
@@ -8,10 +12,8 @@ import LeftpanelDashboard from "@/components/Common/LeftpanelDashboard";
 import Modal from "@/components/Common/Modal";
 import TextGenerator from "@/components/TextGenerator/TextGenerator";
 import StaticbarDashboard from "@/components/Common/StaticbarDashboard";
-import { useCallback, useState, useRef, useEffect } from "react";
-import { toast } from 'react-toastify';
-import ReactLoading from "react-loading";
 import { getUserCache } from '../../utils/auth'
+import { fetchData } from '../../utils/http'
 
 const TextGeneratorPage = () => {
   const newChatsRef = useRef([]);
@@ -41,7 +43,7 @@ const TextGeneratorPage = () => {
     const newChat = {
       id: params.id,
       // author: "/images/team/team-01.jpg",
-      author: user ? user.avatar : "/images/team/team-01.jpg",
+      author: user?.avatar ? user.avatar : "/images/avatar.jpg",
       title: "问",
       desc: params.topic,
       orignalQuestion: params.orignalQuestion,
@@ -113,13 +115,13 @@ const TextGeneratorPage = () => {
         topicId: id
     };
     const urlParams = new URLSearchParams(searchParams).toString();
-    const res = await fetch(`/apis/topicLog${urlParams ? '?' + urlParams : ''}`, {
+    const res = await fetchData(`/apis/topicLog${urlParams ? '?' + urlParams : ''}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
         cache: 'no-store',
-    })
+    }, router, toast)
         .then(res => res.json())
         .catch(err => {
             return {
@@ -180,7 +182,7 @@ function convertTipicLogToChats(logs, user) {
   return logs.map(log => {
     const newChat = {
       id: log.id,
-      author: user ? user.avatar : "/images/team/team-01.jpg",
+      author: user?.avatar ? user.avatar : "/images/avatar.jpg",
       title: "问",
       desc: log.question,
       orignalQuestion: log.orignalQuestion,

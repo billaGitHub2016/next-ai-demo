@@ -30,7 +30,7 @@ function topicLog(sequelize) {
   });
 
   TopicLog.associate = function(models) {
-    TopicLog.belongsTo(models.user, { foreignKey: 'userId' });
+    // TopicLog.belongsTo(models.user, { foreignKey: 'userId' });
     TopicLog.belongsTo(models.topic, { foreignKey: 'topicId' });
   }
 

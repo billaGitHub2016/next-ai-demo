@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+// import CircularProgress from '@mui/material/CircularProgress';
+import LoadingPage from '../app/loading'
 import { setUserCache, getUserCache, removeUserCache } from '../utils/auth'
 
 export const CreateContext = createContext();
@@ -13,6 +16,7 @@ const Context = ({ children }) => {
   const [showItem, setShowItem] = useState(true);
   const [activeMobileMenu, setActiveMobileMenu] = useState(true);
   const [user, setUser] = useState(getUserCache());
+  const [isUserLoading, setIsUserLoading] = useState(false);
 
   const checkScreenSize = () => {
     if (window.innerWidth < 1200) {
@@ -26,13 +30,16 @@ const Context = ({ children }) => {
 
   // 拉取用户数据
   const fetchUer = async () => {
+    setIsUserLoading(true)
     try {
+      debugger
       const res = await fetch('/apis/signin', {
         headers: {
           'Content-Type': 'application/json',
         },
         cache: 'no-store'
       }).then(res => res.json())
+      debugger
       if (res.code === '0') {
         setUser(res.data.user)
         setUserCache(res.data.user)
@@ -43,6 +50,8 @@ const Context = ({ children }) => {
     } catch (error) {
       setUser(null)
       removeUserCache()
+    } finally {
+      setIsUserLoading(false)
     }
   }
 
@@ -81,6 +90,9 @@ const Context = ({ children }) => {
         setUser,
       }}
     >
+      { isUserLoading && (<div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}>
+        <LoadingPage/>
+      </div>) }
       {children}
     </CreateContext.Provider>
   );

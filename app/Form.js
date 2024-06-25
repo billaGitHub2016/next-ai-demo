@@ -109,6 +109,7 @@ const Form = forwardRef((props, ref) => {
       console.log('after the response..')       
       console.log('text = ', text)
 
+      debugger
       if (user) {
         fetch('/apis/topicLog', {
           method: "POST",

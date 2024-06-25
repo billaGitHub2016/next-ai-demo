@@ -20,9 +20,9 @@ function topic(sequelize) {
     indexes: [{ fields: ['title'] }]
   });
 
-  Topic.associate = function(models) {
-    Topic.belongsTo(models.user, { foreignKey: 'userId' });
-  }
+  // Topic.associate = function(models) {
+  //   Topic.belongsTo(models.user, { foreignKey: 'userId' });
+  // }
 
   return Topic
 }

@@ -25,3 +25,4 @@ db.sequelize = sequelize;
 db.user = require('./models/user')(sequelize);
 db.topic = require('./models/topic')(sequelize);
 db.topicLog = require('./models/topicLog')(sequelize);
+db.session = require('./models/session')(sequelize);

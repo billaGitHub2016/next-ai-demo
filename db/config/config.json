@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
+    "username": "leader",
+    "password": "wsEKepebY4DPRT2S",
+    "database": "leader",
+    "host": "13.73.239.158",
     "dialect": "mysql"
   },
   "test": {
@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "leader",
+    "password": "wsEKepebY4DPRT2S",
+    "database": "leader",
+    "host": "13.73.239.158",
     "dialect": "mysql"
   }
 }

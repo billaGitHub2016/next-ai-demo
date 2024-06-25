@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import ReactLoading from 'react-loading';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import RightPanelData from '../../data/dashboard.json';
 import SingleRightPanel from './Props/SingleRightPanel';
 import { useAppContext } from '@/context/Context';
+import { fetchData } from '../../utils/http'
 
 const RightpanelDashboard = forwardRef((props, ref) => {
     const { shouldCollapseRightbar, user } = useAppContext();
@@ -18,6 +19,8 @@ const RightpanelDashboard = forwardRef((props, ref) => {
     const [historyTopics, setHistoryTopics] = useState([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
 
     useImperativeHandle(ref, () => ({
         getHistoryTopics
@@ -35,19 +38,18 @@ const RightpanelDashboard = forwardRef((props, ref) => {
         //     return
         // }
         setLoading(true);
-        const searchParams = {
+        const search = {
             pageNo: 1,
             pageSize: 5,
         };
-        const urlParams = new URLSearchParams(searchParams).toString();
-        const res = await fetch(`/apis/topic${urlParams ? '?' + urlParams : ''}`, {
+        const urlParams = new URLSearchParams(search).toString();
+        const res = await fetchData(`/apis/topic${urlParams ? '?' + urlParams : ''}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
             cache: 'no-store',
-        })
-            .then(res => res.json())
+        }, router, toast, `${pathname}?${searchParams}`)
             .catch(err => {
                 return {
                     message: err.message,
@@ -63,11 +65,6 @@ const RightpanelDashboard = forwardRef((props, ref) => {
                 title: '其他'
             })
             setHistoryTopics(topicList);
-        } else {
-            toast.error(res.message);
-            if (res.code === '401') {
-                router.push('authPage')
-            }
         }
     };
 
@@ -76,21 +73,20 @@ const RightpanelDashboard = forwardRef((props, ref) => {
     }
 
     const deleteTopic = async (id) => {
-        await fetch(`/apis/topic?id=${id}`, {
+        await fetchData(`/apis/topic?id=${id}`, {
             method: "DELETE",
             headers: {
               'Content-Type': 'application/json',
             },
             cache: 'no-store'
-          }).then(res => res.json()).then((res) => {
+          }, router, toast, `${pathname}?${searchParams}`).then((res) => {
             if (res.code === '1') {
-                toast.error(res.message)
             } else {
                 toast.success('会话删除成功')
                 getHistoryTopics();
             }
           }).catch(err => {
-            toast.error(err.message)
+            
           })
     }
 
