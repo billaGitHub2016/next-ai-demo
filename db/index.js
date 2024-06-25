@@ -24,13 +24,7 @@ const sequelize = new Sequelize(database, user, password, {
   host,
   port,
   dialect: "mysql",
-  dialectModule: require("mysql2"),
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
-  },
+  dialectModule: require("mysql2")
 });
 db.sequelize = sequelize;
 db.user = require("./models/user")(sequelize);
