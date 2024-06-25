@@ -1,7 +1,7 @@
-const mysql = require('mysql2/promise');
-const { Sequelize } = require('sequelize');
-const fs = require('fs');
-const path = require('path');
+const mysql = require("mysql2/promise");
+const { Sequelize } = require("sequelize");
+const fs = require("fs");
+const path = require("path");
 const basename = path.basename(__filename);
 
 export const db = {};
@@ -13,16 +13,27 @@ const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
 console.log(host, port, user, password, database);
 await mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
 });
 
 // connect to db
-const sequelize = new Sequelize(database, user, password, { host, port, dialect: 'mysql', dialectModule: require('mysql2'), });
+const sequelize = new Sequelize(database, user, password, {
+  host,
+  port,
+  dialect: "mysql",
+  dialectModule: require("mysql2"),
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
+});
 db.sequelize = sequelize;
-db.user = require('./models/user')(sequelize);
-db.topic = require('./models/topic')(sequelize);
-db.topicLog = require('./models/topicLog')(sequelize);
-db.session = require('./models/session')(sequelize);
+db.user = require("./models/user")(sequelize);
+db.topic = require("./models/topic")(sequelize);
+db.topicLog = require("./models/topicLog")(sequelize);
+db.session = require("./models/session")(sequelize);
