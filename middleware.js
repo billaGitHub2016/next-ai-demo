@@ -32,4 +32,5 @@ export async function middleware(request) {
 
 export const config = {
   // matcher: ['/apis/topic', '/chatProxy']
+  matcher: ['/apis/topic']
 }
