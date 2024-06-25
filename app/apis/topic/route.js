@@ -62,6 +62,7 @@ export async function GET(request) {
     try {
         await validateJwt(jwt)
     } catch (err) {
+        console.error('get topic err= ', err)
         return new Response(
             JSON.stringify({
                 code: '1',

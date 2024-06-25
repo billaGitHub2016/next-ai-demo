@@ -21,6 +21,7 @@ const Home = () => {
   return (
     <>
       <div
+        style={{ height: '79vh'}}
         className="slider-area slider-style-1 variation-default slider-bg-image bg-banner1"
         data-black-overlay="1"
       >

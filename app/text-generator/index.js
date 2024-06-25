@@ -2,7 +2,7 @@
 
 import { useCallback, useState, useRef, useEffect } from "react";
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import ReactLoading from "react-loading";
 import Context from "@/context/Context";
 import HeaderDashboard from "@/components/Header/HeaderDashboard";
@@ -22,7 +22,11 @@ const TextGeneratorPage = () => {
   const user = getUserCache()
   const messageFormRef = useRef(null)
   const [loading, setLoading] = useState(false)
+  const [logLoading, setLogLoading] = useState(false)
   const historyTopicRef = useRef(null)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const html = document.getElementsByTagName('html')[0]
@@ -33,6 +37,15 @@ const TextGeneratorPage = () => {
 
   useEffect(() => {
     window.dispatchNewsDetailEvent = dispatchNewsDetailEvent
+  
+    fetchData('/apis/signin', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        cache: 'no-store',
+    }, router, toast, `${pathname}?${searchParams}`).catch(() => {})
+
     return () => {
       window.dispatchNewsDetailEvent = null
     }
@@ -107,7 +120,10 @@ const TextGeneratorPage = () => {
   }
 
   const getHistoryTopicLogs = async (id) => {
-    setLoading(true);
+    if (logLoading) {
+      return
+    }
+    setLogLoading(true);
     setCurrentTopic({ id });
     const searchParams = {
         pageNo: 1,
@@ -122,14 +138,13 @@ const TextGeneratorPage = () => {
         },
         cache: 'no-store',
     }, router, toast)
-        .then(res => res.json())
         .catch(err => {
             return {
                 message: err.message,
             };
         })
         .finally(() => {
-            setLoading(false);
+            setLogLoading(false);
         });
     if (res.code === '0') {
       if (res.data.list.length === 0) {
@@ -158,7 +173,7 @@ const TextGeneratorPage = () => {
             <HeaderDashboard display="" />
             <PopupMobileMenu />
             <LeftpanelDashboard />
-            <RightpanelDashboard ref={historyTopicRef} onTopicClick={onTopicClick} topic={currentTopic}/>
+            <RightpanelDashboard ref={historyTopicRef} onTopicClick={onTopicClick} topic={currentTopic} topicLogLoading={logLoading}/>
             <Modal onTopicSubmit={onTopicSubmit}/>
 
             <div className="rbt-main-content">

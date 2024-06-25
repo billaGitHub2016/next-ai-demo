@@ -79,6 +79,9 @@ export async function userSignin({ email, password }) {
 }
 
 export async function validateJwt(jwtStr) {
+  if (!jwtStr) {
+    throw new Error("无权限操作，请先登入系统");
+  }
   const decodedToken = jwt.verify(jwtStr, process.env.JWT_SECRET_KEY);
   // console.log("validate decode = ", decodedToken);
   if (!decodedToken || !decodedToken.sub) {

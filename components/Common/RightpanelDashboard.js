@@ -4,7 +4,7 @@ import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'rea
 import ReactLoading from 'react-loading';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-import RightPanelData from '../../data/dashboard.json';
+// import RightPanelData from '../../data/dashboard.json';
 import SingleRightPanel from './Props/SingleRightPanel';
 import { useAppContext } from '@/context/Context';
 import { fetchData } from '../../utils/http'
@@ -34,9 +34,9 @@ const RightpanelDashboard = forwardRef((props, ref) => {
     };
 
     const getHistoryTopics = async () => {
-        // if (!user) {
-        //     return
-        // }
+        if (!user) {
+            return
+        }
         setLoading(true);
         const search = {
             pageNo: 1,
@@ -134,6 +134,7 @@ const RightpanelDashboard = forwardRef((props, ref) => {
                             {historyTopics &&
                                 historyTopics.map(data => (
                                     <SingleRightPanel
+                                        topicLogLoading={props.topicLogLoading}
                                         topic={props.topic}
                                         onTopicClick={props.onTopicClick}
                                         onDeleteTopic={onDeleteTopic}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useConfirm } from 'material-ui-confirm';
+import { CircularProgress  } from '@mui/material';
 
 const SingleRightPanel = ({ title, isActive, id, ...props }) => {
     const confirm = useConfirm();
@@ -17,10 +18,11 @@ const SingleRightPanel = ({ title, isActive, id, ...props }) => {
     return (
         <>
             <li
-                className={`history-box ${props.topic?.id === id ? 'active' : ''}`}
+                className={`history-box ${props.topic?.id === id ? 'active' : ''} ${props.topicLogLoading ? 'loading' : ''}`}
                 onClick={props.onTopicClick.bind(null, id)}
             >
-                <span>{title}</span>
+                <span>{title}{ props.topic?.id === id && props.topicLogLoading && (<CircularProgress size={15} color="secondary" style={{marginLeft: '10px'}}/>) }</span>
+
                 {title !== '其他' && (
                     <a
                         className='dropdown-item'

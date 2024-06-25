@@ -46,42 +46,40 @@ export async function GET(request) {
     let msg = ''
     const jwt = cookies().get('jwt')?.value;
     // console.log('jwt = ', jwt);
-    if (jwt) {
-        try {
-            await validateJwt(jwt)
-        } catch (err) {
-            return new Response(
-                JSON.stringify({
-                    code: '1',
-                    message: err.message,
-                }),
-                {
-                    status: 401,
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                }
-            );
-        }
-        const user = await getUserByJwt(jwt).catch(error => {});
-        if (user) {
-          return new Response(
-              JSON.stringify({
-                  code: '0',
-                  data: {
-                      user,
-                  },
-                  message: '成功',
-              }),
-              {
-                  headers: {
-                      'Content-type': 'application/json',
-                  },
-              }
-          );
-        } else {
-          msg = '用户不存在'
-        }
+    try {
+        await validateJwt(jwt)
+    } catch (err) {
+        return new Response(
+            JSON.stringify({
+                code: '1',
+                message: err.message,
+            }),
+            {
+                status: 401,
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }
+        );
+    }
+    const user = await getUserByJwt(jwt).catch(error => {});
+    if (user) {
+        return new Response(
+            JSON.stringify({
+                code: '0',
+                data: {
+                    user,
+                },
+                message: '成功',
+            }),
+            {
+                headers: {
+                    'Content-type': 'application/json',
+                },
+            }
+        );
+    } else {
+        msg = '用户不存在'
     }
 
     return new Response(
