@@ -18,10 +18,11 @@ export const getTopicLogByPage = async (searchParams) => {
 
   const where = {
     userId: searchParams.userId,
+    topicId
   }
-  if (topicId) {
-    where.topicId = topicId
-  }
+  // if (topicId) {
+  //   where.topicId = topicId
+  // }
   const topics = await db.topicLog.findAll({
     where,
     limit: pageSize,
