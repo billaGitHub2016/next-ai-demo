@@ -15,7 +15,7 @@ const Form = forwardRef((props, ref) => {
     if (question) {
       regenerateMessage(question, orignalQuestion)
     }
-  }, [])
+  }, [user])
 
   useEffect(() => {
     document.addEventListener('newsDetailEvent', newsDetailEventHandler);
@@ -23,7 +23,7 @@ const Form = forwardRef((props, ref) => {
     return () => {
       document.removeEventListener('newsDetailEvent', newsDetailEventHandler);
     }
-  }, [])
+  }, [user])
 
   const handleSendMessage = async (e) => {
     if (e) {
@@ -50,7 +50,7 @@ const Form = forwardRef((props, ref) => {
       console.log('inside the hanlde message fun')
       const params = {
         'message': messgeCopy,
-        'user_id': user.id,
+        'user_id': user?.id,
         'flag':'1'
       };
 
@@ -165,7 +165,7 @@ const Form = forwardRef((props, ref) => {
       console.log('inside the hanlde message fun')
       const params = {
         'message':message.trim(),
-        'user_id': user.id,
+        'user_id': user?.id,
         'flag':'1'
       };
 
