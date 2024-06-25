@@ -49,8 +49,8 @@ const Form = forwardRef((props, ref) => {
     try {  
       console.log('inside the hanlde message fun')
       const params = {
-        'message':messgeCopy,
-        'user_id': '12',
+        'message': messgeCopy,
+        'user_id': user.id,
         'flag':'1'
       };
 
@@ -165,7 +165,7 @@ const Form = forwardRef((props, ref) => {
       console.log('inside the hanlde message fun')
       const params = {
         'message':message.trim(),
-        'user_id': '12',
+        'user_id': user.id,
         'flag':'1'
       };
 

@@ -12,10 +12,7 @@ export async function POST(request) {
             JSON.stringify({
                 code: '0',
                 data: {
-                    user: {
-                        ...result.user,
-                        id: undefined
-                    },
+                    user
                 },
                 message: '登录成功',
             }),
