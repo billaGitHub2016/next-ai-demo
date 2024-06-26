@@ -21,6 +21,7 @@ import "../public/scss/style.scss";
 export default function RootLayout({ children }) {
   useEffect(() => {
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
+    console.log('version = 1.0.1')
   }, []);
   return (
     <html lang="en">
