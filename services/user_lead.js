@@ -5,26 +5,26 @@ import { db } from "../db";
 export const EXPIRE_DATE = 60 * 60 * 24 * 7 * 1000;
 
 // 创建连接池，设置连接池的参数
-// const pool = mysql.createPool({
-//   host: process.env.DB_USER_HOST,
-//   port: process.env.DB_USER_PORT,
-//   user: process.env.DB_USER_USER,
-//   database: process.env.DB_USER_DB_NAME,
-//   waitForConnections: true,
-//   connectionLimit: 5,
-//   maxIdle: 5, // 最大空闲连接数，默认等于 `connectionLimit`
-//   idleTimeout: 60000, // 空闲连接超时，以毫秒为单位，默认值为 60000 ms
-//   queueLimit: 0,
-//   enableKeepAlive: true,
-//   keepAliveInitialDelay: 0,
-// });
-const pool = mysql.createConnection({
+const pool = mysql.createPool({
   host: process.env.DB_USER_HOST,
   port: process.env.DB_USER_PORT,
   user: process.env.DB_USER_USER,
-  password: process.env.DB_USER_PASSWORD,
   database: process.env.DB_USER_DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 5,
+  maxIdle: 5, // 最大空闲连接数，默认等于 `connectionLimit`
+  idleTimeout: 60000, // 空闲连接超时，以毫秒为单位，默认值为 60000 ms
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });
+// const pool = mysql.createConnection({
+//   host: process.env.DB_USER_HOST,
+//   port: process.env.DB_USER_PORT,
+//   user: process.env.DB_USER_USER,
+//   password: process.env.DB_USER_PASSWORD,
+//   database: process.env.DB_USER_DB_NAME,
+// });
 
 export async function userSignin({ email, password }) {
   // 现在获取一个链接池的 Promise 包装实例
