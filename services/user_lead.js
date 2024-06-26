@@ -4,21 +4,27 @@ import md5 from "md5";
 import { db } from "../db";
 export const EXPIRE_DATE = 60 * 60 * 24 * 7 * 1000;
 
+let pool = null
 // 创建连接池，设置连接池的参数
-const pool = mysql.createPool({
-  host: process.env.DB_USER_HOST,
-  port: process.env.DB_USER_PORT,
-  user: process.env.DB_USER_USER,
-  password: process.env.DB_USER_PASSWORD,
-  database: process.env.DB_USER_DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 5,
-  maxIdle: 5, // 最大空闲连接数，默认等于 `connectionLimit`
-  idleTimeout: 60000, // 空闲连接超时，以毫秒为单位，默认值为 60000 ms
-  queueLimit: 0,
-  enableKeepAlive: true,
-  keepAliveInitialDelay: 0,
-});
+function createPollConnection() {
+  pool = mysql.createPool({
+    host: process.env.DB_USER_HOST,
+    port: process.env.DB_USER_PORT,
+    user: process.env.DB_USER_USER,
+    password: process.env.DB_USER_PASSWORD,
+    database: process.env.DB_USER_DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 5,
+    maxIdle: 5, // 最大空闲连接数，默认等于 `connectionLimit`
+    idleTimeout: 60000, // 空闲连接超时，以毫秒为单位，默认值为 60000 ms
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0,
+  });
+}
+
+createPollConnection();
+
 // const pool = mysql.createConnection({
 //   host: process.env.DB_USER_HOST,
 //   port: process.env.DB_USER_PORT,
@@ -26,6 +32,26 @@ const pool = mysql.createPool({
 //   password: process.env.DB_USER_PASSWORD,
 //   database: process.env.DB_USER_DB_NAME,
 // });
+
+// 监听错误事件
+pool.on('error', (err) => {
+  console.error('Connection pool has err = ', err);
+  if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+    // 这里可以添加重连逻辑
+    createPollConnection();
+  }
+});
+
+// 定期发送心跳包
+setInterval(async () => {
+  try {
+    const promisePool = pool.promise();
+    await promisePool.execute('SELECT 1');
+  } catch (err) {
+    console.error('Heartbeat failed, attempting to reconnect...');
+    // 这里可以添加重连逻辑
+  }
+}, 40000); // 每40秒发送一次心跳
 
 export async function userSignin({ email, password }) {
   // 现在获取一个链接池的 Promise 包装实例
