@@ -15,7 +15,7 @@ const Form = forwardRef((props, ref) => {
     if (question) {
       regenerateMessage(question, orignalQuestion)
     }
-  }, [user])
+  }, [user, props.topic])
 
   useEffect(() => {
     document.addEventListener('newsDetailEvent', newsDetailEventHandler);
@@ -23,7 +23,7 @@ const Form = forwardRef((props, ref) => {
     return () => {
       document.removeEventListener('newsDetailEvent', newsDetailEventHandler);
     }
-  }, [user])
+  }, [user, props.topic])
 
   const handleSendMessage = async (e) => {
     if (e) {
@@ -109,7 +109,6 @@ const Form = forwardRef((props, ref) => {
       console.log('after the response..')       
       console.log('text = ', text)
 
-      debugger
       if (user) {
         fetch('/apis/topicLog', {
           method: "POST",
@@ -233,7 +232,6 @@ const Form = forwardRef((props, ref) => {
           
         })
       }
-      debugger
       props.onFinishChat({
         id: topicId
       }) 
