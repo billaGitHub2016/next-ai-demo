@@ -141,7 +141,7 @@
       "isDisable": false,
       "type": "default",
       "img": "/images/generator-icon/text.png",
-      "text": "全球新闻智搜",
+      "text": "智答",
       "badge": "",
       "icon": ""
     }],
@@ -149,7 +149,7 @@
     {
       "link": "/text-generator",
       "isDisable": false,
-      "title": "全球新闻智搜",
+      "title": "智答",
       "img": "/images/generator-icon/text.png",
       "badge": ""
     }

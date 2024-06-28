@@ -36,7 +36,7 @@ const Home = () => {
                   {/* <span className="color-off">智汇于掌</span> */}
                 </h1>
                 <p className="b1 desc-text">
-                  领先决策辅助系统
+                个人智能助理
                 </p>
                 <div className="button-group">
                  
